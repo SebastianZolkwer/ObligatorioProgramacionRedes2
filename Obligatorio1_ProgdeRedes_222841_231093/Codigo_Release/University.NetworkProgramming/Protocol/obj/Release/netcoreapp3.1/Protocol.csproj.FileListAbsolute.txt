@@ -1,0 +1,26 @@
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.deps.json
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.pdb
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\File.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\File.pdb
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csprojAssemblyReference.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.GeneratedMSBuildEditorConfig.editorconfig
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.AssemblyInfoInputs.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.AssemblyInfo.cs
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csproj.CoreCompileInputs.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csproj.CopyComplete
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.pdb
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.deps.json
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\Protocol.pdb
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\File.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\bin\Release\netcoreapp3.1\File.pdb
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csprojAssemblyReference.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.GeneratedMSBuildEditorConfig.editorconfig
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.AssemblyInfoInputs.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.AssemblyInfo.cs
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csproj.CoreCompileInputs.cache
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.csproj.CopyComplete
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.dll
+D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Protocol\obj\Release\netcoreapp3.1\Protocol.pdb
