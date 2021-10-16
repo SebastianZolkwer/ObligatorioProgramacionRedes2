@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IpWhDtTTjy7FAmVIF8t26v+Pb8/OPV8d+Bdnevuz33/qH0lL/kosaTuzKoAjJHusCHsRaDgO3ZlL5JGBI6b9BA==",
+  "dgSpecHash": "4slfFrJ9m9Zl+6iuCZI0OLorRWN9Mz4Det9UesvqemLL5SVeJVRf52n3Ni6oVrgQGBD/n/Y492gIEtnZNZr+lQ==",
   "success": true,
-  "projectFilePath": "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
+  "projectFilePath": "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sebas\\.nuget\\packages\\microsoft.extensions.configuration\\5.0.0\\microsoft.extensions.configuration.5.0.0.nupkg.sha512",
     "C:\\Users\\sebas\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",

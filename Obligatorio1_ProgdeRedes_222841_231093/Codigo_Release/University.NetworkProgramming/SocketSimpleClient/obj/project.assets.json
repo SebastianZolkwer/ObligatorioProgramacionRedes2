@@ -348,11 +348,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
+      "projectUniqueName": "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
+      "projectPath": "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\Client.csproj",
       "packagesPath": "C:\\Users\\sebas\\.nuget\\packages\\",
-      "outputPath": "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\obj\\",
+      "outputPath": "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\SocketSimpleClient\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\sebas\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -369,8 +369,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {
-              "projectPath": "D:\\Escritorio\\Facultad\\semestre6\\programacionEnredes\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj"
+            "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {
+              "projectPath": "D:\\Escritorio\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj"
             }
           }
         }
