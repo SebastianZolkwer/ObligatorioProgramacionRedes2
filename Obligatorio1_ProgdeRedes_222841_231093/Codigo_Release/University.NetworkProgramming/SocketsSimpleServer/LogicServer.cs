@@ -12,10 +12,12 @@ namespace SocketsSimpleServer
 {
     public static class LogicServer
     {
+        private static List<Client> clients = new List<Client>();
         public static void ClientHandler( Socket clientSocket)
         {
             string request = "";
-            List<Game> boughtGames = new List<Game>();
+            Client client = new Client();
+            clients.Add(client);
             while (request != "Exit")
             {
                 try
@@ -38,7 +40,7 @@ namespace SocketsSimpleServer
                             break;
                         case 3:
                             request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());
-                            response = Logic.Buy(request, boughtGames);
+                            response = Logic.Buy(request, client.boughtGames);
                             Protocol.Protocol.SendAndCode(clientSocket, ProtocolMethods.Success, response, ProtocolMethods.Response);
                             break;
                         case 4:
@@ -68,7 +70,7 @@ namespace SocketsSimpleServer
                             break;
                         case 9:
                             request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());
-                            response = Logic.Delete(request);
+                            response = Logic.Delete(request, clients);
                             Protocol.Protocol.SendAndCode(clientSocket, ProtocolMethods.Success, response, ProtocolMethods.Response);
                             break;
                         case 10:
@@ -89,6 +91,11 @@ namespace SocketsSimpleServer
                             FileHandler fileHandler = new FileHandler();                            
                             FileStreamHandler _fileStreamHandler = new FileStreamHandler();
                             Protocol.Protocol.SendFile(clientSocket, route, fileHandler, 1, request, _fileStreamHandler);
+                            break;
+                        case 14:
+                            request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());
+                            response = Logic.GetListBought(request, client.boughtGames);
+                            Protocol.Protocol.SendAndCode(clientSocket, ProtocolMethods.Success, response, ProtocolMethods.Response);
                             break;
                     }
                 }

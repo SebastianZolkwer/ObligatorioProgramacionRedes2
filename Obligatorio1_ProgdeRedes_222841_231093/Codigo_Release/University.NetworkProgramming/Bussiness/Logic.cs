@@ -21,9 +21,9 @@ namespace Bussiness
             Game newGame = new Game
             {
                 Qualifications = new List<Review>(),
-                Title = data[0],
-                Gender = data[1],
-                Sinopsis = data[2],
+                Title = data[0].Trim(),
+                Gender = data[1].Trim(),
+                Sinopsis = data[2].Trim(),
                 AverageQualification = 0,
                 SumOfQualification = 0
 
@@ -40,7 +40,7 @@ namespace Bussiness
 
         private static Game GetGame(string title)
         {
-            Game game = games.FirstOrDefault(game => game.Title == title);
+            Game game = games.FirstOrDefault(game => game.Title == title.Trim());
             return game;
         }
 
@@ -85,20 +85,22 @@ namespace Bussiness
                     throw new Exception("No hay juegos en el sistema\n");
                 }
                 else
-                    response += "Lista de juegos:\n";
                 {
-                    foreach (Game game in games)
+                    response += "Lista de juegos:\n";
                     {
-                        response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
-                    }
+                        foreach (Game game in games)
+                        {
+                            response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
+                        }
 
+                    }
                 }
             }
             return response;
 
         }
 
-        public static string Delete(string data)
+        public static string Delete(string data, List<Client> clients)
         {
             lock (gamesLock)
             {
@@ -108,6 +110,14 @@ namespace Bussiness
                     throw new Exception("No fue encontrado el juego \n");
                 }
                 games.Remove(game);
+                foreach(Client client in clients)
+                {
+                    Game deleteGame = client.boughtGames.FirstOrDefault(game => game.Title == data.Trim());
+                    if (deleteGame != null)
+                    {
+                        client.boughtGames.Remove(deleteGame);
+                    }
+                }
 
             }
             return "Fue borrado el juego\n";
@@ -132,7 +142,7 @@ namespace Bussiness
                 Review review = new Review
                 {
                     Rating = rate,
-                    Description = data[2]
+                    Description = data[2].Trim()
                 };
                 game.Qualifications.Add(review);
 
@@ -195,6 +205,24 @@ namespace Bussiness
                 return imgRoute;
 
             }
+        }
+
+        public static string GetListBought(string request, List<Game> boughtGames)
+        {
+            if (boughtGames.Count == 0)
+            {
+                throw new Exception("No hay juegos comprados \n");
+            }
+            else
+            {
+                string response = "Lista de juegos:\n";
+                foreach (Game game in games)
+                {
+                    response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
+                }
+                return response;
+            }
+
         }
 
         public static void UpdateRoute(string request)
@@ -273,7 +301,7 @@ namespace Bussiness
             {
                 throw new Exception("No fue encontrado el juego\n");
             }
-            else if (boughtGames.FirstOrDefault(game => game.Title == data) != null)
+            else if (boughtGames.FirstOrDefault(game => game.Title == data.Trim()) != null)
             {
                 throw new Exception("Ya se compro este juego\n");
             }
@@ -293,6 +321,4 @@ namespace Bussiness
             }
         }
     }
-
-
 }

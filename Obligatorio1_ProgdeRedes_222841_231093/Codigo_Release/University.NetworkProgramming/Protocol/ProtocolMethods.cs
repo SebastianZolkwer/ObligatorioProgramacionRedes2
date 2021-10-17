@@ -21,6 +21,7 @@ namespace Protocol
         public const int SendImage = 11;
         public const int UpdateRoute = 12;
         public const int ReceiveImage = 13;
+        public const int ListBoughtGames = 14;
         public const string Request = "REQ";
         public const string Response = "RES";
     }
