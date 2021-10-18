@@ -38,6 +38,18 @@ namespace Bussiness
             return "Fue agregado el juego\n";
         }
 
+        public static Client Register(string request, List<Client> clients)
+        {
+            string[] data = request.Split("-");
+            string name = data[0];
+            string password = data[1];
+            if(clients.Any(c => c.name == name))
+            {
+                throw new Exception("Ya existe un usuario con ese nombre.\n");
+            }
+            return new Client(name, password); 
+        }
+
         private static Game GetGame(string title)
         {
             Game game = games.FirstOrDefault(game => game.Title == title.Trim());
@@ -73,6 +85,23 @@ namespace Bussiness
             }
         }
 
+        public static Client Login(string request, List<Client> clients)
+        {
+            string[] data = request.Split("-");
+            string name = data[0];
+            string password = data[1];
+
+            Client client = clients.FirstOrDefault(c => c.name == name);
+            if(client is null)
+            {
+                throw new Exception("No existe usuario con ese nombre, reescriba o registrese.\n");
+            } 
+            if(client.password != password)
+            {
+                throw new Exception("Password incorrecta");
+            }
+            return client;
+        }
 
         public static string GetAll()
         {
@@ -152,9 +181,6 @@ namespace Bussiness
 
             return "Se evaluo el juego\n";
         }
-
-
-
 
         public static string Search(string filters)
         {
@@ -308,6 +334,7 @@ namespace Bussiness
             boughtGames.Add(game);
             return "Se compro el juego\n";
         }
+
         private static int GetNumber(string number)
         {
             try

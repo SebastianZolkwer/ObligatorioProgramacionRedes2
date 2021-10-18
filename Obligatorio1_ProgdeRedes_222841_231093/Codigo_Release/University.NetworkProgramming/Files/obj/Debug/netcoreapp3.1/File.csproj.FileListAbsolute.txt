@@ -27,3 +27,13 @@ D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de
 D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.csproj.CoreCompileInputs.cache
 D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.dll
 D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio\Programacion de redes\University.NetworkProgramming (1)\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.pdb
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\bin\Debug\netcoreapp3.1\File.deps.json
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\bin\Debug\netcoreapp3.1\File.dll
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\bin\Debug\netcoreapp3.1\File.pdb
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.csprojAssemblyReference.cache
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.AssemblyInfoInputs.cache
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.AssemblyInfo.cs
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.csproj.CoreCompileInputs.cache
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.dll
+C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Files\obj\Debug\netcoreapp3.1\File.pdb
