@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SocketSimpleClient
 {
@@ -13,26 +14,26 @@ namespace SocketSimpleClient
         public static  FileStreamHandler fileStreamHandler = new FileStreamHandler();
         private static bool connected = true;
         private static bool logged = false;
-        public static void WriteServer(Socket socket)
+        public async static Task WriteServerAsync(TcpClient tcpClient, NetworkStream networkStream)
         {
             Header header = new Header();
-            ManageClient(socket, header);
-            ActionMenu(socket, header);
+            await ManageClientAsync(tcpClient,  networkStream, header);
+            await ActionMenuAsync(tcpClient, networkStream, header);  
         }
 
-        private static void Exit(Socket socket)
+        private static async Task ExitAsync(TcpClient tcpClient, NetworkStream networkStream)
         {
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
             }
             catch (SocketException)
             { }
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close();
+            networkStream.Close();
+            tcpClient.Close();
         }
 
-        private static void ActionMenu(Socket socket, Header header)
+        private async static Task ActionMenuAsync(TcpClient tcpClient, NetworkStream networkStream, Header header)
         {
             while (connected)
             {
@@ -49,53 +50,53 @@ namespace SocketSimpleClient
                 switch (option)
                 {
                     case 1:
-                        Create(socket, header);
+                        await CreateAsync(networkStream, header);
                         break;
                     case 2:
-                        Update(socket, header);
+                        await UpdateAsync(networkStream, header);
                         break;
                     case 3:
-                        Buy(socket, header);
+                        await BuyAsync(networkStream, header);
                         break;
                     case 4:
-                        Evaluate(socket, header);
+                        await EvaluateAsync(networkStream, header);
                         break;
                     case 5:
-                        Search(socket, header);
+                        await SearchAsync(networkStream, header);
                         break;
                     case 6:
-                        Show(socket, header);
+                        await ShowAsync(networkStream, header);
                         break;
                     case 7:
-                        ShowAll(socket, header);
+                        await ShowAllAsync(networkStream, header);
                         break;
                     case 8:
-                        Reviews(socket, header);
+                        await ReviewsAsync(networkStream, header);
                         break;
                     case 9:
-                        Delete(socket, header);
+                        await DeleteAsync(networkStream, header);
                         break;
                     case 10:
                         connected = false;
-                        Exit(socket);
+                        await ExitAsync(tcpClient, networkStream);
                         break;
                     case 11:
-                        ListBoughtGames(socket, header);
+                        await ListBoughtGamesAsync(networkStream, header);
                         break;
                     case 12:
                         logged = false;
-                        WriteServer(socket);
+                        await WriteServerAsync(tcpClient, networkStream);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         //WriteServer(socket);
                         break;
                 }
-
+        
             }
         }
 
-        private static void ManageClient(Socket socket, Header header)
+        private async static Task ManageClientAsync(TcpClient tcpClient, NetworkStream networkStream, Header header)
         {
             while (!logged)
             {
@@ -113,25 +114,25 @@ namespace SocketSimpleClient
                 switch (login)
                 {
                     case 1:
-                        Register(socket, header);
+                        await RegisterAsync(networkStream, header);
                         break;
                     case 2:
-                        Login(socket, header);
+                        await LoginAsync (networkStream, header);
                         break;
                     case 3:
                         logged = true;
                         connected = false;
-                        Exit(socket);
+                        await ExitAsync(tcpClient, networkStream);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
-                        WriteServer(socket);
+                        await WriteServerAsync(tcpClient, networkStream);
                         break;
                 }
             }
         }
 
-        private static void Login(Socket socket, Header header)
+        private static async Task LoginAsync(NetworkStream networkStream, Header header)
         {
             string name;
             string password;
@@ -142,9 +143,9 @@ namespace SocketSimpleClient
             password = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Login, $"{name}-{password}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Login, $"{name}-{password}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -159,7 +160,7 @@ namespace SocketSimpleClient
             }
         }
 
-        private static void Register(Socket socket, Header header)
+        private async static Task RegisterAsync(NetworkStream networkStream, Header header)
         {
             string name;
             string password;
@@ -170,9 +171,9 @@ namespace SocketSimpleClient
             password = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Register, $"{name}-{password}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol .Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Register, $"{name}-{password}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -192,13 +193,13 @@ namespace SocketSimpleClient
             return "Seleccione una opcion:\n 1. Registrarse\n 2. Iniciar Sesion\n 3. Salir";
         }
 
-        private static void ListBoughtGames(Socket socket, Header header)
+        private async static Task ListBoughtGamesAsync(NetworkStream networkStream, Header header)
         {
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.ListBoughtGames, "", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.ListBoughtGames, "", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -207,7 +208,7 @@ namespace SocketSimpleClient
             }
         }
 
-        private static void Delete(Socket socket, Header header)
+        private async static Task DeleteAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
 
@@ -216,9 +217,9 @@ namespace SocketSimpleClient
             titleGame = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Delete, $"{titleGame}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Delete, $"{titleGame}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -228,7 +229,7 @@ namespace SocketSimpleClient
             
         }
 
-        private static void Reviews(Socket socket, Header header)
+        private async static Task ReviewsAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
 
@@ -237,9 +238,9 @@ namespace SocketSimpleClient
             titleGame = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Reviews, $"{titleGame}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Reviews, $"{titleGame}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -249,13 +250,13 @@ namespace SocketSimpleClient
             
         }
 
-        private static void ShowAll(Socket socket, Header header)
+        private async static Task ShowAllAsync(NetworkStream networkStream, Header header)
         {
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.ShowAll, "", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await  Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.ShowAll, "", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -265,7 +266,7 @@ namespace SocketSimpleClient
            
         }
 
-        private static void Show(Socket socket, Header header)
+        private async static Task  ShowAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
 
@@ -274,9 +275,9 @@ namespace SocketSimpleClient
             titleGame = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Show, $"{titleGame}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Show, $"{titleGame}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -296,9 +297,9 @@ namespace SocketSimpleClient
                 {
                     try
                     {
-                        Protocol.Protocol.SendAndCode(socket, ProtocolMethods.ReceiveImage, titleGame, ProtocolMethods.Request);
-                        header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                        Protocol.Protocol.ReceiveFile(socket, header, fileStreamHandler, false);
+                        await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.ReceiveImage, titleGame, ProtocolMethods.Request);
+                        header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                        await Protocol.Protocol.ReceiveFileAsync(networkStream, header, fileStreamHandler, false);
                         Console.WriteLine("Se ha descargado la imagen correspondiente!");
                     } catch (SocketException)
                     {
@@ -309,7 +310,7 @@ namespace SocketSimpleClient
             }
             
         }
-        private static void Search(Socket socket, Header header)
+        private async static Task SearchAsync(NetworkStream networkStream, Header header)
         {
             string gender = "";
             string rate = "";
@@ -323,9 +324,9 @@ namespace SocketSimpleClient
             gender = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Search, $"{titleGame}-{rate}-{gender}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Search, $"{titleGame}-{rate}-{gender}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -335,7 +336,7 @@ namespace SocketSimpleClient
             
         }
 
-        private static void Evaluate(Socket socket, Header header)
+        private async static Task EvaluateAsync(NetworkStream networkStream, Header header)
         {
             string rate;
             string description;
@@ -350,9 +351,9 @@ namespace SocketSimpleClient
             description = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Evaluate, $"{titleGame}-{rate}-{description}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Evaluate, $"{titleGame}-{rate}-{description}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }catch (SocketException)
             {
@@ -360,18 +361,18 @@ namespace SocketSimpleClient
             }
         }
 
-        private static void Buy(Socket socket, Header header)
+        private  async static Task BuyAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
             Console.WriteLine("Ingrese titulo de juego que quiere comprar");
             titleGame = Console.ReadLine();
-            Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Buy, $"{titleGame}", ProtocolMethods.Request);
-            header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-            string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+            await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Buy, $"{titleGame}", ProtocolMethods.Request);
+            header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+            string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
             Console.WriteLine(response);
         }
 
-        private static void Update(Socket socket, Header header)
+        private async static Task UpdateAsync(NetworkStream networkStream, Header header)
         {
             string title = "";
             string gender = "";
@@ -388,9 +389,9 @@ namespace SocketSimpleClient
             sinopsis = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Update, $"{titleGame}-{title}-{gender}-{sinopsis}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Update, $"{titleGame}-{title}-{gender}-{sinopsis}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -399,7 +400,7 @@ namespace SocketSimpleClient
             }  
         }
 
-        private static void Create(Socket socket, Header header)
+        private async static Task CreateAsync(NetworkStream networkStream, Header header)
         {
             string title;
             string gender;
@@ -414,9 +415,9 @@ namespace SocketSimpleClient
             sinopsis = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Create, $"{title}-{gender}-{sinopsis}", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Create, $"{title}-{gender}-{sinopsis}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
@@ -437,11 +438,11 @@ namespace SocketSimpleClient
                 }
                 try
                 {
-                    Protocol.Protocol.SendFile(socket, path, fileHandler, ProtocolMethods.SendImage, title, fileStreamHandler);
-                    header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                    string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                    await Protocol.Protocol.SendFileAsync(networkStream, path, fileHandler, ProtocolMethods.SendImage, title, fileStreamHandler);
+                    header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                    string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                     Console.WriteLine(response);
-                    Protocol.Protocol.SendAndCode(socket, ProtocolMethods.UpdateRoute, $"{title}-{type}", ProtocolMethods.Request);
+                   await  Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.UpdateRoute, $"{title}-{type}", ProtocolMethods.Request);
                 }
                 catch (SocketException) {
                     connected = false;
