@@ -24,6 +24,9 @@ namespace Protocol
         public const int ListBoughtGames = 14;
         public const string Request = "REQ";
         public const string Response = "RES";
+        public const int Register = 15;
+        public const int Login = 16;
+
     }
 }
 

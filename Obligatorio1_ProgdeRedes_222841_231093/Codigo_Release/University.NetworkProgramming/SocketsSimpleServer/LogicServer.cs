@@ -16,8 +16,7 @@ namespace SocketsSimpleServer
         public static void ClientHandler( Socket clientSocket)
         {
             string request = "";
-            Client client = new Client();
-            clients.Add(client);
+            Client client = null;
             while (request != "Exit")
             {
                 try
@@ -27,6 +26,17 @@ namespace SocketsSimpleServer
                     string response;
                     switch (header.GetMethod())
                     {
+                        case 15:
+                            request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());
+                            client = Logic.Register(request, clients);
+                            clients.Add(client);
+                            Protocol.Protocol.SendAndCode(clientSocket, ProtocolMethods.Success, "Se creo un nuevo usuario", ProtocolMethods.Response);
+                            break;
+                        case 16:
+                            request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());
+                            client = Logic.Login(request, clients);
+                            Protocol.Protocol.SendAndCode(clientSocket, ProtocolMethods.Success, "Se loggeo un nuevo usuario", ProtocolMethods.Response);
+                            break;
 
                         case 1:
                             request = Protocol.Protocol.RecieveAndDecodeVariableData(clientSocket, header.GetDataLength());

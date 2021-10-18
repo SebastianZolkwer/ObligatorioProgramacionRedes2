@@ -12,10 +12,28 @@ namespace SocketSimpleClient
         public static FileHandler fileHandler = new FileHandler();
         public static  FileStreamHandler fileStreamHandler = new FileStreamHandler();
         private static bool connected = true;
+        private static bool logged = false;
         public static void WriteServer(Socket socket)
         {
+            Header header = new Header();
+            ManageClient(socket, header);
+            ActionMenu(socket, header);
+        }
 
-            
+        private static void Exit(Socket socket)
+        {
+            try
+            {
+                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
+            }
+            catch (SocketException)
+            { }
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+        }
+
+        private static void ActionMenu(Socket socket, Header header)
+        {
             while (connected)
             {
                 Console.WriteLine(ShowMenu());
@@ -23,11 +41,11 @@ namespace SocketSimpleClient
                 try
                 {
                     option = GetNumber(Console.ReadLine());
-                }catch (Exception e)
-                { 
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine(e.Message);
                 }
-                Header header = new Header();
                 switch (option)
                 {
                     case 1:
@@ -59,25 +77,119 @@ namespace SocketSimpleClient
                         break;
                     case 10:
                         connected = false;
+                        Exit(socket);
                         break;
                     case 11:
                         ListBoughtGames(socket, header);
+                        break;
+                    case 12:
+                        logged = false;
+                        WriteServer(socket);
+                        break;
+                    default:
+                        Console.WriteLine("Opcion invalida");
+                        //WriteServer(socket);
+                        break;
+                }
+
+            }
+        }
+
+        private static void ManageClient(Socket socket, Header header)
+        {
+            while (!logged)
+            {
+                Console.WriteLine(ShowInitialMenu());
+                int login = 0;
+                try
+                {
+                    login = GetNumber(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+                switch (login)
+                {
+                    case 1:
+                        Register(socket, header);
+                        break;
+                    case 2:
+                        Login(socket, header);
+                        break;
+                    case 3:
+                        logged = true;
+                        connected = false;
+                        Exit(socket);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         WriteServer(socket);
                         break;
                 }
-                
             }
+        }
+
+        private static void Login(Socket socket, Header header)
+        {
+            string name;
+            string password;
+
+            Console.WriteLine("Ingrese Nombre de usuario");
+            name = Console.ReadLine();
+            Console.WriteLine("Ingrese su Password");
+            password = Console.ReadLine();
             try
             {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
+                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Login, $"{name}-{password}", ProtocolMethods.Request);
+                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
+                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                Console.WriteLine(response);
             }
-            catch (SocketException ) 
-            { }
-            socket.Shutdown(SocketShutdown.Both);
-            socket.Close(); 
+            catch (SocketException)
+            {
+                // connected = false;
+            }
+
+            if (header.GetMethod() != ProtocolMethods.Error)
+            {
+                Console.WriteLine("¡" + name + ", bienvenido nuevamente al sistema!");
+                logged = true;
+            }
+        }
+
+        private static void Register(Socket socket, Header header)
+        {
+            string name;
+            string password;
+   
+            Console.WriteLine("Ingrese Nombre de usuario");
+            name = Console.ReadLine();
+            Console.WriteLine("Ingrese su Password");
+            password = Console.ReadLine();
+            try
+            {
+                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.Register, $"{name}-{password}", ProtocolMethods.Request);
+                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
+                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
+                Console.WriteLine(response);
+            }
+            catch (SocketException)
+            {
+               // connected = false;
+            }
+
+            if (header.GetMethod() != ProtocolMethods.Error)
+            {
+                Console.WriteLine("¡" + name + ", bienvenido al sistema!");
+                logged = true;
+            }
+        }
+
+        private static string ShowInitialMenu()
+        {
+            return "Seleccione una opcion:\n 1. Registrarse\n 2. Iniciar Sesion\n 3. Salir";
         }
 
         private static void ListBoughtGames(Socket socket, Header header)
@@ -341,7 +453,7 @@ namespace SocketSimpleClient
 
         private static string ShowMenu()
         {
-            return "Seleccione una opcion:\n 1. Crear Juego\n 2. Modificar Juego\n 3. Comprar Juego\n 4. Calificar Juego\n 5. Buscar Juego\n 6. Ver Juego\n 7. Ver Catalogo\n 8. Ver Reviews de un Juego\n 9. Eliminar juego\n 10. Exit\n 11.Obtener lista de comprados";
+            return "Seleccione una opcion:\n 1. Crear Juego\n 2. Modificar Juego\n 3. Comprar Juego\n 4. Calificar Juego\n 5. Buscar Juego\n 6. Ver Juego\n 7. Ver Catalogo\n 8. Ver Reviews de un Juego\n 9. Eliminar juego\n 10. Exit\n 11. Obtener lista de comprados\n 12. Logout";
         }
         private static int GetNumber(string number)
         {
