@@ -2,6 +2,7 @@
 using System;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Protocol
 {
@@ -13,7 +14,7 @@ namespace Protocol
         public const int FileNameSize = 4;
         public const int FileSize = 8;
         public const int MaxPacketSize = 8192;
-        public static void SendAndCode(Socket socket, int method, String message, string direction)
+        public async static Task SendAndCodeAsync(NetworkStream networkStream, int method, String message, string direction)
         {
 
             Header header = new Header(direction, method, message.Length);
@@ -22,8 +23,8 @@ namespace Protocol
             byte[] values = Encoding.UTF8.GetBytes(message);
 
 
-            SendSpecificMessage(socket, data);
-            SendSpecificMessage(socket, values);
+            await SendSpecificMessageAsync(networkStream, data);
+            await SendSpecificMessageAsync(networkStream, values);
         }
 
 
@@ -36,37 +37,24 @@ namespace Protocol
 
 
 
-        public static void SendSpecificMessage(Socket socket, byte[] dataLength)
+        public async static Task SendSpecificMessageAsync(NetworkStream networkStream, byte[] dataLength)
         {
-            int totalDataSent = 0;
-
-            while (totalDataSent < dataLength.Length)
-            {
-                try
-                {
-                    int sent = socket.Send(dataLength, offset: totalDataSent, size: dataLength.Length - totalDataSent, SocketFlags.None);
-                    if (sent == 0)
-                    {
-                        throw new SocketException();
-                    }
-                    totalDataSent += sent;
-                } catch(Exception ex) { }
-            }
+            await networkStream.WriteAsync(dataLength, 0, dataLength.Length);
         }
 
 
 
-        public static Header ReceiveAndDecodeFixData(Socket handler, Header header)
+        public async static Task<Header> ReceiveAndDecodeFixDataAsync(NetworkStream networkStream, Header header)
         {
             int headerLength = ProtocolMethods.Request.Length + MethodLength + DataLength;
-            byte[] data = ReceiveData(handler, headerLength);
+            byte[] data = await ReceiveDataAsync(networkStream, headerLength);
             header.DecodeData(data);
             return header;
         }
 
-        public static void ReceiveFile(Socket socket, Header header, FileStreamHandler fileStreamHandler, bool servidor)
+        public async static Task ReceiveFileAsync(NetworkStream networkStream, Header header, FileStreamHandler fileStreamHandler, bool servidor)
         {
-            string data = RecieveAndDecodeVariableData(socket, header.GetDataLength());
+            string data = await RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
 
 
 
@@ -85,44 +73,44 @@ namespace Protocol
                 byte[] buffer;
                 if (currentPart != parts)
                 {
-                    buffer = ReceiveData(socket, MaxPacketSize);
+                    buffer = await ReceiveDataAsync(networkStream, MaxPacketSize);
                     offset += MaxPacketSize;
                 }
                 else
                 {
                     int lastPartSize = (int)(fileSize - offset);
-                    buffer = ReceiveData(socket, lastPartSize);
+                    buffer = await ReceiveDataAsync(networkStream, lastPartSize);
                     offset += lastPartSize;
                 }
 
                 if (servidor)
                 {
-                    fileStreamHandler.WriteData("CaratulasServer/" + title + "." + type, buffer);
+                    await fileStreamHandler.WriteData("CaratulasServer/" + title + "." + type, buffer);
                 }
                 else
                 {
-                    fileStreamHandler.WriteData("CaratulasClient/" + title + "." + type, buffer);
+                    await fileStreamHandler.WriteData("CaratulasClient/" + title + "." + type, buffer);
                 }
 
                 currentPart++;
             }
         }
 
-        public static string RecieveAndDecodeVariableData(Socket socket, int length)
+        public  async static Task<string> RecieveAndDecodeVariableDataAsync(NetworkStream networkStream, int length)
         {
-            byte[] value = ReceiveData(socket, length);
+            byte[] value = await ReceiveDataAsync(networkStream, length);
             string response = Encoding.UTF8.GetString(value);
             return response;
         }
 
 
-        public static byte[] ReceiveData(Socket socket, int length)
+        public async static Task<byte[]> ReceiveDataAsync(NetworkStream networkStream, int length)
         {
             int offset = 0;
             byte[] response = new byte[length];
             while (offset < length)
             {
-                int received = socket.Receive(response, offset, length - offset, SocketFlags.None);
+                int received = await networkStream.ReadAsync(response, offset, length - offset);
                 if (received == 0)
                 {
                     throw new SocketException();
@@ -133,17 +121,17 @@ namespace Protocol
         }
 
 
-        public static void SendFile(Socket socket, string path, FileHandler filehandler, int method, string title, FileStreamHandler fileStreamHandler)
+        public async static Task SendFileAsync(NetworkStream networkStream, string path, FileHandler filehandler, int method, string title, FileStreamHandler fileStreamHandler)
         {
             long fileSize = filehandler.GetFileSize(path);
             string fileName = filehandler.GetFileName(path);
             var fileSizeData = BitConverter.GetBytes(fileSize).Length;
             var header = new Header(ProtocolMethods.Request, method, fileName.Length + fileSizeData + title.Length);
             var dataHeader = header.GetRequest();
-            SendSpecificMessage(socket, dataHeader);
+            await SendSpecificMessageAsync(networkStream, dataHeader);
             string fileData = fileName + "!" + title + "!" + fileSize;
             var bytesFileData = Encoding.UTF8.GetBytes(fileData);
-            SendSpecificMessage(socket, bytesFileData);
+            await SendSpecificMessageAsync(networkStream, bytesFileData);
 
             long parts = CalculateParts(fileSize);
             long offset = 0;
@@ -154,18 +142,18 @@ namespace Protocol
                 byte[] data;
                 if (currentPart != parts)
                 {
-                    data = fileStreamHandler.ReadData(@path, MaxPacketSize, offset);
+                    data = await fileStreamHandler.ReadData(@path, MaxPacketSize, offset);
                     offset += MaxPacketSize;
                 }
                 else
                 {
                     int lastPartSize = (int)(fileSize - offset);
-                    data = fileStreamHandler.ReadData(@path, lastPartSize, offset);
+                    data = await fileStreamHandler.ReadData(@path, lastPartSize, offset);
                     offset += lastPartSize;
                 }
                 try
                 {
-                    SendSpecificMessage(socket, data);
+                    await SendSpecificMessageAsync(networkStream, data);
                 }
                 catch (Exception ex)
                 {

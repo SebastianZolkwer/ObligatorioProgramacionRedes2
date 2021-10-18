@@ -60,9 +60,6 @@ namespace SocketSimpleClient
                     case 10:
                         connected = false;
                         break;
-                    case 11:
-                        ListBoughtGames(socket, header);
-                        break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         WriteServer(socket);
@@ -78,21 +75,6 @@ namespace SocketSimpleClient
             { }
             socket.Shutdown(SocketShutdown.Both);
             socket.Close(); 
-        }
-
-        private static void ListBoughtGames(Socket socket, Header header)
-        {
-            try
-            {
-                Protocol.Protocol.SendAndCode(socket, ProtocolMethods.ListBoughtGames, "", ProtocolMethods.Request);
-                header = Protocol.Protocol.ReceiveAndDecodeFixData(socket, header);
-                string response = Protocol.Protocol.RecieveAndDecodeVariableData(socket, header.GetDataLength());
-                Console.WriteLine(response);
-            }
-            catch (SocketException)
-            {
-                connected = false;
-            }
         }
 
         private static void Delete(Socket socket, Header header)
@@ -341,7 +323,7 @@ namespace SocketSimpleClient
 
         private static string ShowMenu()
         {
-            return "Seleccione una opcion:\n 1. Crear Juego\n 2. Modificar Juego\n 3. Comprar Juego\n 4. Calificar Juego\n 5. Buscar Juego\n 6. Ver Juego\n 7. Ver Catalogo\n 8. Ver Reviews de un Juego\n 9. Eliminar juego\n 10. Exit\n 11.Obtener lista de comprados";
+            return "Seleccione una opcion:\n 1. Crear Juego\n 2. Modificar Juego\n 3. Comprar Juego\n 4. Calificar Juego\n 5. Buscar Juego\n 6. Ver Juego\n 7. Ver Catalogo\n 8. Ver Reviews de un Juego\n 9. Eliminar juego\n 10. Exit";
         }
         private static int GetNumber(string number)
         {

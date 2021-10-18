@@ -16,15 +16,11 @@ namespace Server
         private bool runServer = true;
         public ServerHandler()
         {
-            Socket serverSocket = new Socket(
-                AddressFamily.InterNetwork,
-                SocketType.Stream,
-                ProtocolType.Tcp);
             IPEndPoint serverIpEndPoint = new IPEndPoint(
                 IPAddress.Parse(GetIPAddress()),
                 GetPort());
-            serverSocket.Bind(serverIpEndPoint);
-            serverSocket.Listen(GetBackLog());
+            TcpListener _tcpListener = new TcpListener(serverIpEndPoint);
+            _tcpListener.Start(GetBackLog());
             Console.WriteLine("Start listening for client");
             if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasServer"))
             {
@@ -32,7 +28,7 @@ namespace Server
 
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
-            Thread acceptClients = new Thread(() => AcceptClients(serverSocket));
+            Thread acceptClients = new Thread(() => AcceptClients(_tcpListener));
             acceptClients.IsBackground = true;
             acceptClients.Start();
             
@@ -88,12 +84,13 @@ namespace Server
             var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false).Build();
             return config.GetSection("ipAddress").Value.ToString();
         }
-        private void AcceptClients(Socket socket)
+        private void AcceptClients(TcpListener tcpListener)
         {
             while (runServer)
             {
-                Socket clientSocket = socket.Accept();
-                Thread client = new Thread(() => LogicServer.ClientHandler(clientSocket));
+                TcpClient tcpClient = tcpListener.AcceptTcpClient();
+                NetworkStream _networkStream = tcpClient.GetStream();
+                Thread client = new Thread(() => LogicServer.ClientHandler(tcpClient, _networkStream));
                 client.IsBackground = true;
                 client.Start();
             }
