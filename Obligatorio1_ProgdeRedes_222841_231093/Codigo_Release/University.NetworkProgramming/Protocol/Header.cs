@@ -31,7 +31,7 @@ namespace Protocol
         {
             byte[] header = new byte[ProtocolMethods.Request.Length + Protocol.MethodLength + Protocol.DataLength];
             direction.CopyTo(header, 0);
-            method.CopyTo(header,direction.Length);
+            method.CopyTo(header, direction.Length);
             dataLength.CopyTo(header, direction.Length + method.Length);
             return header;
         }

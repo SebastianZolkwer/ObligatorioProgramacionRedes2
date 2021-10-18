@@ -7,21 +7,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SocketSimpleClient
 {
     public class ClientHandler
     {
-        public ClientHandler()
+        public async Task StartClient()
         {
-            Socket clientSocket = new Socket(
-                AddressFamily.InterNetwork,
-                SocketType.Stream,
-                ProtocolType.Tcp);
             IPEndPoint clientEndPoint = new IPEndPoint(
                 IPAddress.Parse(GetIPAddressClient()),
                 GetPortClient());
-            clientSocket.Bind(clientEndPoint);
+            TcpClient tcpClient = new TcpClient(clientEndPoint);
             Console.WriteLine("Trying to connect to server...");
             IPEndPoint serverEndPoint = new IPEndPoint(
                 IPAddress.Parse(GetIPAddressServer()),
@@ -32,9 +29,10 @@ namespace SocketSimpleClient
 
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasClient");
-            clientSocket.Connect(serverEndPoint);
+            await tcpClient.ConnectAsync(IPAddress.Parse(GetIPAddressServer()), GetPortServer());
             Console.WriteLine("Connected to server");
-            LogicClient.WriteServer(clientSocket);
+            NetworkStream networkStream = tcpClient.GetStream();
+            await LogicClient.WriteServerAsync(tcpClient, networkStream);
         }
 
         private int GetPortServer()
