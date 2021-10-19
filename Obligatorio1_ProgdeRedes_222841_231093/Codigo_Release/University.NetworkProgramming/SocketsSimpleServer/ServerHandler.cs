@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -28,10 +29,7 @@ namespace Server
 
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
-            Thread acceptClients = new Thread(() => AcceptClients(_tcpListener));
-            acceptClients.IsBackground = true;
-            acceptClients.Start();
-            
+            Task acceptClients = Task.Run(() => AcceptClients(_tcpListener));            
             string message = "";
             while (message != "2")
             {
@@ -90,9 +88,7 @@ namespace Server
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
-                Thread client = new Thread(() => LogicServer.ClientHandlerAsync(tcpClient, _networkStream));
-                client.IsBackground = true;
-                client.Start();
+                Task task = Task.Run(() => LogicServer.ClientHandlerAsync(tcpClient, _networkStream));
             }
         }
     }

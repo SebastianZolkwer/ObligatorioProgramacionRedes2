@@ -9,7 +9,7 @@ namespace SocketSimpleClient
         static async Task Main(string[] args)
         {
             ClientHandler clientHandler = new ClientHandler();
-            await clientHandler.StartClient();
+            await clientHandler.StartClientAsync();
         }
          
     }

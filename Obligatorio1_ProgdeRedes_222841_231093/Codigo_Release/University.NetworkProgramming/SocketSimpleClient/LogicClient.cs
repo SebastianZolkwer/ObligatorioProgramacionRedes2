@@ -2,6 +2,7 @@
 using Protocol;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,19 @@ namespace SocketSimpleClient
         private static bool logged = false;
         public async static Task WriteServerAsync(TcpClient tcpClient, NetworkStream networkStream)
         {
+
             Header header = new Header();
-            await ManageClientAsync(tcpClient,  networkStream, header);
-            await ActionMenuAsync(tcpClient, networkStream, header);  
+            try
+            {
+                await ManageClientAsync(tcpClient, networkStream, header);
+                await ActionMenuAsync(tcpClient, networkStream, header);
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Se cerro la conexion del servidor");
+            }
+            networkStream.Close();
+            tcpClient.Close();
         }
 
         private static async Task ExitAsync(TcpClient tcpClient, NetworkStream networkStream)
@@ -27,7 +38,7 @@ namespace SocketSimpleClient
             {
                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
             }
-            catch (SocketException)
+            catch (IOException)
             { }
             networkStream.Close();
             tcpClient.Close();
@@ -49,6 +60,7 @@ namespace SocketSimpleClient
                 }
                 switch (option)
                 {
+
                     case 1:
                         await CreateAsync(networkStream, header);
                         break;
@@ -89,10 +101,8 @@ namespace SocketSimpleClient
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
-                        //WriteServer(socket);
                         break;
                 }
-        
             }
         }
 

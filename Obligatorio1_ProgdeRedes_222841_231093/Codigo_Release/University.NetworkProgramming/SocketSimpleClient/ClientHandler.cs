@@ -13,7 +13,7 @@ namespace SocketSimpleClient
 {
     public class ClientHandler
     {
-        public async Task StartClient()
+        public async Task StartClientAsync()
         {
             IPEndPoint clientEndPoint = new IPEndPoint(
                 IPAddress.Parse(GetIPAddressClient()),
