@@ -251,6 +251,19 @@ namespace Bussiness
 
         }
 
+        public static Client DeleteUser(string request, List<Client> clients)
+        {
+            string[] data = request.Split("-");
+            string name = data[0];
+            string password = data[1];
+            Client client = clients.FirstOrDefault(c => c.name == name && c.password == password);
+            if (client is null)
+            {
+                throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+            }
+            return client;
+        }
+
         public static void UpdateRoute(string request)
         {
             string[] data = request.Split("-");
@@ -264,6 +277,23 @@ namespace Bussiness
                     game.ImageRoute = Directory.GetCurrentDirectory() + @"\CaratulasServer\" + data[0] + data[1];
 
             }
+        }
+
+        public static Client UpdateUser(string request, List<Client> clients)
+        {
+            string[] data = request.Split("-");
+            string oldName = data[0];
+            string oldPassword = data[1];
+            string newName = data[2];
+            string newPassword = data[3];
+            Client client = clients.FirstOrDefault(c => c.name == oldName && c.password == oldPassword);
+            if (client is null)
+            {
+                throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+            }
+            client.name = newName;
+            client.password = newPassword;
+            return  client;
         }
 
         public static string Show(string data)

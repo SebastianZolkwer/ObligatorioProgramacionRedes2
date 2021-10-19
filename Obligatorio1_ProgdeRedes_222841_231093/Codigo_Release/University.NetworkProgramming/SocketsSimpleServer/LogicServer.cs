@@ -117,5 +117,45 @@ namespace SocketsSimpleServer
                 }
             }
         }
+
+        internal static void DeleteUserAsync(string name, string password)
+        {
+            string request = name + "-" + password;
+            try
+            {
+                Client client = Logic.DeleteUser(request, clients);
+                clients.Remove(client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        internal static void UpdateUserAsync(string oldName, string oldPassword, string newName, string newPassword)
+        {
+            string request = oldName + "-" + oldPassword + "-" + newName + "-" + newPassword;
+            try
+            {
+                Client client = Logic.UpdateUser(request, clients);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public static void CreateNewUserAsync(string name, string password)
+        {
+            string request = name + "-" + password;
+            try
+            {
+                Client client = Logic.Register(request, clients);
+                clients.Add(client);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
     }
 }
