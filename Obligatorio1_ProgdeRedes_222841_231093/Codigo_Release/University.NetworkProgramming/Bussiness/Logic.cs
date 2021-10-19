@@ -13,6 +13,7 @@ namespace Bussiness
     {
         public static List<Game> games = new List<Game>();
         private static readonly object gamesLock = new Object();
+        private static readonly object clientsLock = new Object();
         public static string Add(string information)
         {
 
@@ -43,11 +44,16 @@ namespace Bussiness
             string[] data = request.Split("-");
             string name = data[0];
             string password = data[1];
-            if(clients.Any(c => c.name == name))
+            lock (clientsLock)
             {
-                throw new Exception("Ya existe un usuario con ese nombre.\n");
+                if (clients.Any(c => c.name == name))
+                {
+                    throw new Exception("Ya existe un usuario con ese nombre.\n");
+                }
+                Client client = new Client(name, password);
+                clients.Add(client);
+                return client;
             }
-            return new Client(name, password); 
         }
 
         private static Game GetGame(string title)
@@ -70,10 +76,7 @@ namespace Bussiness
                     {
                         throw new Exception("Ya existe un juego con ese nombre\n");
                     }
-                    else
-                    {
-                        game.Title = data[1];
-                    }
+                    game.Title = data[1];
                 }
                 if (!String.IsNullOrEmpty(data[2])) {
                     game.Gender = data[2];
@@ -90,17 +93,19 @@ namespace Bussiness
             string[] data = request.Split("-");
             string name = data[0];
             string password = data[1];
-
-            Client client = clients.FirstOrDefault(c => c.name == name);
-            if(client is null)
+            lock (clientsLock)
             {
-                throw new Exception("No existe usuario con ese nombre, reescriba o registrese.\n");
-            } 
-            if(client.password != password)
-            {
-                throw new Exception("Password incorrecta");
+                Client client = clients.FirstOrDefault(c => c.name == name);
+                if (client is null)
+                {
+                    throw new Exception("No existe usuario con ese nombre, reescriba o registrese.\n");
+                }
+                if (client.password != password)
+                {
+                    throw new Exception("Password incorrecta");
+                }
+                return client;
             }
-            return client;
         }
 
         public static string GetAll()
@@ -233,6 +238,14 @@ namespace Bussiness
             }
         }
 
+        public static void ActiveUser(Client client)
+        {
+            lock (clientsLock)
+            {
+                client.active = true;
+            }
+        }
+
         public static string GetListBought(string request, List<Game> boughtGames)
         {
             if (boughtGames.Count == 0)
@@ -251,17 +264,25 @@ namespace Bussiness
 
         }
 
-        public static Client DeleteUser(string request, List<Client> clients)
+        public static string DeleteUser(string request, List<Client> clients)
         {
             string[] data = request.Split("-");
             string name = data[0];
             string password = data[1];
-            Client client = clients.FirstOrDefault(c => c.name == name && c.password == password);
-            if (client is null)
+            lock (clientsLock)
             {
-                throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+                Client client = clients.FirstOrDefault(c => c.name == name && c.password == password);
+                if (client is null)
+                {
+                    throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+                }
+                if (client.active)
+                {
+                    throw new Exception("No es posible eliminar usuarios activos.\n");
+                }
+                clients.Remove(client);
             }
-            return client;
+            return "Se ha eliminado el usuario " + name;
         }
 
         public static void UpdateRoute(string request)
@@ -279,21 +300,25 @@ namespace Bussiness
             }
         }
 
-        public static Client UpdateUser(string request, List<Client> clients)
+        public static string UpdateUser(string request, List<Client> clients)
         {
             string[] data = request.Split("-");
             string oldName = data[0];
             string oldPassword = data[1];
             string newName = data[2];
             string newPassword = data[3];
-            Client client = clients.FirstOrDefault(c => c.name == oldName && c.password == oldPassword);
-            if (client is null)
+            lock (clientsLock)
             {
-                throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+                Client client = clients.FirstOrDefault(c => c.name == oldName && c.password == oldPassword);
+                if (client is null)
+                {
+                    throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
+                }
+                client.name = newName;
+                client.password = newPassword;
             }
-            client.name = newName;
-            client.password = newPassword;
-            return  client;
+            
+            return "Se ha modificado el usuario.";
         }
 
         public static string Show(string data)

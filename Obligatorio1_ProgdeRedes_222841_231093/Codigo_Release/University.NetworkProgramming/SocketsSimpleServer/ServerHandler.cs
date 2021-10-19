@@ -39,7 +39,7 @@ namespace Server
         private async Task RunFuncionalitiesMenuAsync()
         {
             int message = -1;
-            while (message != 5)
+            while (message != 6)
             {
                 WriteMenu();
                 try
@@ -65,6 +65,9 @@ namespace Server
                         await DeleteUserAsync();
                         break;
                     case 5:
+                        await ShowAllUsersAsync();
+                        break;
+                    case 6:
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
@@ -72,6 +75,11 @@ namespace Server
                 }
           
             }
+        }
+
+        private async Task ShowAllUsersAsync()
+        {
+            Console.WriteLine(await LogicServer.ShowAllUsersAsync());
         }
 
         private async Task CreateUserAsync()
@@ -83,8 +91,7 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            LogicServer.CreateNewUserAsync(name, password);
-            
+           Console.WriteLine(await LogicServer.CreateNewUserAsync(name, password));
         }
 
         private async Task UpdateUserAsync()
@@ -93,7 +100,6 @@ namespace Server
             string oldPassword;
             string newName;
             string newPassword;
-
             Console.WriteLine("Ingrese Nombre de usuario anterior");
             oldName = Console.ReadLine();
             Console.WriteLine("Ingrese Password anterior");
@@ -102,7 +108,7 @@ namespace Server
             newName = Console.ReadLine();
             Console.WriteLine("Ingrese Password nueva");
             newPassword = Console.ReadLine();
-            LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword);
+            Console.WriteLine( LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword));
 
         }
 
@@ -115,7 +121,7 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            LogicServer.DeleteUserAsync(name, password);
+            Console.WriteLine(LogicServer.DeleteUserAsync(name, password));
 
         }
         private async Task ShowAllGamesAsync()
@@ -132,7 +138,7 @@ namespace Server
 
         private void WriteMenu()
         {
-            Console.WriteLine("Seleccione una opcion:\n 1. Ver Catalogo de Juegos\n 2. Crear Usuario\n 3. Editar Usuario\n 4. Eliminar Usuario\n 5. Exit");
+            Console.WriteLine("Seleccione una opcion:\n 1. Ver Catalogo de Juegos\n 2. Crear Usuario\n 3. Editar Usuario\n 4. Eliminar Usuario\n 5. Ver Lista de Usuarios\n 6. Exit");
         }
 
         private int GetPort()
