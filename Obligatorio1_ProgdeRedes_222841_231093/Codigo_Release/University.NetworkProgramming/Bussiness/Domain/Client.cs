@@ -9,6 +9,7 @@ namespace Bussiness.Domain
         public List<Game> boughtGames;
         public string name;
         public string password;
+        public bool active;
 
         public Client()
         {
@@ -19,6 +20,7 @@ namespace Bussiness.Domain
             this.name = name;
             this.password = password;
             boughtGames = new List<Game>();
+            this.active = false;
         }
     }
     

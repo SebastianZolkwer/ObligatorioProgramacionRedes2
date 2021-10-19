@@ -26,6 +26,7 @@ namespace Protocol
         public const string Response = "RES";
         public const int Register = 15;
         public const int Login = 16;
+        public const int Logout = 17;
 
     }
 }

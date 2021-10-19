@@ -30,29 +30,115 @@ namespace Server
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
             Task acceptClients = Task.Run(() => AcceptClients(_tcpListener));            
-            string message = "";
-            while (message != "2")
-            {
-                Console.WriteLine("Seleccione una opcion:\n 1. Ver Catalogo\n 2. Exit");
-                message = Console.ReadLine();
-
-                if (message == "1")
-                {
-                    try
-                    {
-                        Console.WriteLine(Logic.GetAll());
-                    }catch(Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    
-                }
-                else if (message != "2")
-                {
-                    Console.WriteLine("No fue seleccionada ninguna funcionalidad");
-                }
-            }
+            
+            RunFuncionalitiesMenuAsync();
+            
             runServer = false;
+        }
+
+        private async Task RunFuncionalitiesMenuAsync()
+        {
+            int message = -1;
+            while (message != 6)
+            {
+                WriteMenu();
+                try
+                {
+                    message = GetNumber(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                switch (message)
+                {
+                    case 1:
+                        await ShowAllGamesAsync();
+                        break;
+                    case 2:
+                        await CreateUserAsync();
+                        break;
+                    case 3:
+                        await UpdateUserAsync();
+                        break;
+                    case 4:
+                        await DeleteUserAsync();
+                        break;
+                    case 5:
+                        await ShowAllUsersAsync();
+                        break;
+                    case 6:
+                        break;
+                    default:
+                        Console.WriteLine("Opcion invalida");
+                        break;
+                }
+          
+            }
+        }
+
+        private async Task ShowAllUsersAsync()
+        {
+            Console.WriteLine(await LogicServer.ShowAllUsersAsync());
+        }
+
+        private async Task CreateUserAsync()
+        {
+            string name;
+            string password;
+
+            Console.WriteLine("Ingrese Nombre de usuario");
+            name = Console.ReadLine();
+            Console.WriteLine("Ingrese Password");
+            password = Console.ReadLine();
+           Console.WriteLine(await LogicServer.CreateNewUserAsync(name, password));
+        }
+
+        private async Task UpdateUserAsync()
+        {
+            string oldName;
+            string oldPassword;
+            string newName;
+            string newPassword;
+            Console.WriteLine("Ingrese Nombre de usuario anterior");
+            oldName = Console.ReadLine();
+            Console.WriteLine("Ingrese Password anterior");
+            oldPassword = Console.ReadLine();
+            Console.WriteLine("Ingrese Nombre de usuario nuevo");
+            newName = Console.ReadLine();
+            Console.WriteLine("Ingrese Password nueva");
+            newPassword = Console.ReadLine();
+            Console.WriteLine( LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword));
+
+        }
+
+        private async Task DeleteUserAsync()
+        {
+            string name;
+            string password;
+
+            Console.WriteLine("Ingrese Nombre de usuario");
+            name = Console.ReadLine();
+            Console.WriteLine("Ingrese Password");
+            password = Console.ReadLine();
+            Console.WriteLine(LogicServer.DeleteUserAsync(name, password));
+
+        }
+        private async Task ShowAllGamesAsync()
+        {
+            try
+            {
+                Console.WriteLine(Logic.GetAll());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void WriteMenu()
+        {
+            Console.WriteLine("Seleccione una opcion:\n 1. Ver Catalogo de Juegos\n 2. Crear Usuario\n 3. Editar Usuario\n 4. Eliminar Usuario\n 5. Ver Lista de Usuarios\n 6. Exit");
         }
 
         private int GetPort()
@@ -89,6 +175,18 @@ namespace Server
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
                 Task task = Task.Run(() => LogicServer.ClientHandlerAsync(tcpClient, _networkStream));
+            }
+        }
+        private static int GetNumber(string number)
+        {
+            try
+            {
+                int rating = Int32.Parse(number);
+                return rating;
+            }
+            catch
+            {
+                throw new Exception("La opcion elegida debe ser un numero");
             }
         }
     }

@@ -97,12 +97,28 @@ namespace SocketSimpleClient
                         break;
                     case 12:
                         logged = false;
+                        await LogoutAsync(networkStream, header);
                         await WriteServerAsync(tcpClient, networkStream);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
                 }
+            }
+        }
+
+        private static async Task LogoutAsync(NetworkStream networkStream, Header header)
+        {
+            try
+            {
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Logout, "", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
+                Console.WriteLine(response);
+            }
+            catch (SocketException)
+            {
+                // connected = false;
             }
         }
 
