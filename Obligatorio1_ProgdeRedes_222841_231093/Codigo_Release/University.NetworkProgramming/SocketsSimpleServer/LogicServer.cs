@@ -15,7 +15,7 @@ namespace SocketsSimpleServer
     public static class LogicServer
     {
         private static List<Client> clients = new List<Client>();
-        public async static Task ClientHandlerAsync(TcpClient tcpClient, NetworkStream networkStream)
+        public async static Task ClientHandlerAsync(NetworkStream networkStream)
         {
             {
                 string request = "";
@@ -76,7 +76,10 @@ namespace SocketsSimpleServer
                                 break;
                             case 10:
                                 request = "Exit";
-                                if (client is null) { } else { client.active = false; }
+                                if (!(client is null))
+                                {
+                                    client.active = false;
+                                }
                                 break;
                             case 11:
                                 FileStreamHandler fileStreamHandler = new FileStreamHandler();

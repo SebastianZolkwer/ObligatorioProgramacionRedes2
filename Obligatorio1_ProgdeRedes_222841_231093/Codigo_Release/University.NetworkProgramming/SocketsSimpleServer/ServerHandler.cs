@@ -174,7 +174,7 @@ namespace Server
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
-                Task task = Task.Run(() => LogicServer.ClientHandlerAsync(tcpClient, _networkStream));
+                Task task = Task.Run(() => LogicServer.ClientHandlerAsync(_networkStream));
             }
         }
         private static int GetNumber(string number)

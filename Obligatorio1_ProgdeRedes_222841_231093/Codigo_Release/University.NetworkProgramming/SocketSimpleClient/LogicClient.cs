@@ -97,13 +97,14 @@ namespace SocketSimpleClient
                         break;
                     case 12:
                         logged = false;
+                        connected = false;
                         await LogoutAsync(networkStream, header);
-                        await WriteServerAsync(tcpClient, networkStream);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
                 }
+                await WriteServerAsync(tcpClient, networkStream);
             }
         }
 
@@ -183,6 +184,7 @@ namespace SocketSimpleClient
             {
                 Console.WriteLine("¡" + name + ", bienvenido nuevamente al sistema!");
                 logged = true;
+                connected = true;
             }
         }
 
@@ -211,6 +213,7 @@ namespace SocketSimpleClient
             {
                 Console.WriteLine("¡" + name + ", bienvenido al sistema!");
                 logged = true;
+                connected = true;
             }
         }
 
@@ -251,15 +254,12 @@ namespace SocketSimpleClient
             catch (SocketException)
             {
                 connected = false;
-            }
-            
+            } 
         }
 
         private async static Task ReviewsAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
-
-
             Console.WriteLine("Ingrese titulo de juego que quiere observar las calificaciones");
             titleGame = Console.ReadLine();
             try
@@ -288,15 +288,12 @@ namespace SocketSimpleClient
             catch (SocketException)
             {
                 connected = false;
-            }
-           
+            }   
         }
 
         private async static Task  ShowAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
-
-
             Console.WriteLine("Ingrese titulo de juego que quiere observar detalles");
             titleGame = Console.ReadLine();
             try
@@ -473,8 +470,6 @@ namespace SocketSimpleClient
                 catch (SocketException) {
                     connected = false;
                 }
-                
-
             }
         }
 
