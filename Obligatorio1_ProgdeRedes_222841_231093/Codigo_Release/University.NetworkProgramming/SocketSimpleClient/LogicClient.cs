@@ -38,7 +38,7 @@ namespace SocketSimpleClient
             {
                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Exit, "Exit", ProtocolMethods.Request);
             }
-            catch (IOException)
+            catch (SocketException)
             { }
             networkStream.Close();
             tcpClient.Close();
@@ -97,13 +97,14 @@ namespace SocketSimpleClient
                         break;
                     case 12:
                         logged = false;
+                        connected = false;
                         await LogoutAsync(networkStream, header);
-                        await WriteServerAsync(tcpClient, networkStream);
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
                 }
+                await WriteServerAsync(tcpClient, networkStream);
             }
         }
 
@@ -117,9 +118,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                // connected = false;
-            }
+            {}
         }
 
         private async static Task ManageClientAsync(TcpClient tcpClient, NetworkStream networkStream, Header header)
@@ -175,14 +174,12 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                // connected = false;
-            }
-
+            {}
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 Console.WriteLine("¡" + name + ", bienvenido nuevamente al sistema!");
                 logged = true;
+                connected = true;
             }
         }
 
@@ -203,14 +200,12 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-               // connected = false;
-            }
-
+            {}
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 Console.WriteLine("¡" + name + ", bienvenido al sistema!");
                 logged = true;
+                connected = true;
             }
         }
 
@@ -229,15 +224,12 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
+            {}
         }
 
         private async static Task DeleteAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
-
 
             Console.WriteLine("Ingrese titulo de juego que quiere borrar");
             titleGame = Console.ReadLine();
@@ -249,17 +241,12 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
-            
+            {} 
         }
 
         private async static Task ReviewsAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
-
-
             Console.WriteLine("Ingrese titulo de juego que quiere observar las calificaciones");
             titleGame = Console.ReadLine();
             try
@@ -270,10 +257,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
-            
+            {}
         }
 
         private async static Task ShowAllAsync(NetworkStream networkStream, Header header)
@@ -286,17 +270,12 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
-           
+            {}   
         }
 
         private async static Task  ShowAsync(NetworkStream networkStream, Header header)
         {
             string titleGame = "";
-
-
             Console.WriteLine("Ingrese titulo de juego que quiere observar detalles");
             titleGame = Console.ReadLine();
             try
@@ -307,9 +286,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
+            {}
             if(header.GetMethod() == ProtocolMethods.Success)
             {
                 Console.WriteLine("Desea descargar la caratula? Si/No" );
@@ -328,10 +305,7 @@ namespace SocketSimpleClient
                         await Protocol.Protocol.ReceiveFileAsync(networkStream, header, fileStreamHandler, false);
                         Console.WriteLine("Se ha descargado la imagen correspondiente!");
                     } catch (SocketException)
-                    {
-                        connected = false;
-                    }
-                   
+                    {}
                 }
             }
             
@@ -356,10 +330,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
-            
+            {} 
         }
 
         private async static Task EvaluateAsync(NetworkStream networkStream, Header header)
@@ -382,9 +353,7 @@ namespace SocketSimpleClient
                 string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }catch (SocketException)
-            {
-                connected = false;
-            }
+            {}
         }
 
         private  async static Task BuyAsync(NetworkStream networkStream, Header header)
@@ -392,10 +361,14 @@ namespace SocketSimpleClient
             string titleGame = "";
             Console.WriteLine("Ingrese titulo de juego que quiere comprar");
             titleGame = Console.ReadLine();
-            await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Buy, $"{titleGame}", ProtocolMethods.Request);
-            header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
-            string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-            Console.WriteLine(response);
+            try {
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Buy, $"{titleGame}", ProtocolMethods.Request);
+                header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
+                string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
+                Console.WriteLine(response);
+            }
+            catch (SocketException) 
+            { }
         }
 
         private async static Task UpdateAsync(NetworkStream networkStream, Header header)
@@ -421,9 +394,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }  
+            { } 
         }
 
         private async static Task CreateAsync(NetworkStream networkStream, Header header)
@@ -447,9 +418,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {
-                connected = false;
-            }
+            {}
 
             if (header.GetMethod() != ProtocolMethods.Error)
             {
@@ -470,11 +439,8 @@ namespace SocketSimpleClient
                     Console.WriteLine(response);
                    await  Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.UpdateRoute, $"{title}-{type}", ProtocolMethods.Request);
                 }
-                catch (SocketException) {
-                    connected = false;
-                }
-                
-
+                catch (SocketException) 
+                {}
             }
         }
 

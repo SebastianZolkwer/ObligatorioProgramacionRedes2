@@ -15,7 +15,7 @@ namespace SocketsSimpleServer
     public static class LogicServer
     {
         private static List<Client> clients = new List<Client>();
-        public async static Task ClientHandlerAsync(TcpClient tcpClient, NetworkStream networkStream)
+        public async static Task ClientHandlerAsync(NetworkStream networkStream)
         {
             {
                 string request = "";
@@ -76,7 +76,10 @@ namespace SocketsSimpleServer
                                 break;
                             case 10:
                                 request = "Exit";
-                                if (client is null) { } else { client.active = false; }
+                                if (!(client is null))
+                                {
+                                    client.active = false;
+                                }
                                 break;
                             case 11:
                                 FileStreamHandler fileStreamHandler = new FileStreamHandler();
@@ -126,7 +129,7 @@ namespace SocketsSimpleServer
             }
         }
 
-        public async static Task<string> ShowAllUsersAsync()
+        public static string ShowAllUsers()
         {
             string response = "";
             int clientsNumber = 1;
@@ -142,7 +145,7 @@ namespace SocketsSimpleServer
             return response;
         }
 
-        public static string DeleteUserAsync(string name, string password)
+        public static string DeleteUser(string name, string password)
         {
             string request = name + "-" + password;
             try
@@ -168,7 +171,7 @@ namespace SocketsSimpleServer
             }
         }
 
-        public async static Task<string> CreateNewUserAsync(string name, string password)
+        public static string  CreateNewUser(string name, string password)
         {
             string request = name + "-" + password;
             try

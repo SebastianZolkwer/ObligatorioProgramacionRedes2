@@ -151,15 +151,7 @@ namespace Protocol
                     data = await fileStreamHandler.ReadDataAsync(@path, lastPartSize, offset);
                     offset += lastPartSize;
                 }
-                try
-                {
-                    await SendSpecificMessageAsync(networkStream, data);
-                }
-                catch (Exception ex)
-                {
-
-                }
-
+                await SendSpecificMessageAsync(networkStream, data);
                 currentPart++;
             }
         }

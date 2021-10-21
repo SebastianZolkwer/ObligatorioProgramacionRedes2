@@ -20,9 +20,6 @@ namespace SocketSimpleClient
                 GetPortClient());
             TcpClient tcpClient = new TcpClient(clientEndPoint);
             Console.WriteLine("Trying to connect to server...");
-            IPEndPoint serverEndPoint = new IPEndPoint(
-                IPAddress.Parse(GetIPAddressServer()),
-                GetPortServer());
             if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasClient"))
             {
                 Directory.Delete("CaratulasClient", true);
