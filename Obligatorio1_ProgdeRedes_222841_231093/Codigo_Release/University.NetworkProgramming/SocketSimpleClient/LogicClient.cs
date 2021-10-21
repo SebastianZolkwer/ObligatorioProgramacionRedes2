@@ -380,7 +380,7 @@ namespace SocketSimpleClient
 
             Console.WriteLine("Ingrese titulo de juego que quiere modificar");
             titleGame = Console.ReadLine();
-            Console.WriteLine("Ingrese NUEVO titulo de juego");
+            Console.WriteLine("Ingrese nuevo titulo de juego");
             title = Console.ReadLine();
             Console.WriteLine("Ingrese genero");
             gender = Console.ReadLine();

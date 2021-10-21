@@ -29,92 +29,92 @@ namespace SocketsSimpleServer
                         string response;
                         switch (header.GetMethod())
                         {
-                            case 1:
+                            case ProtocolMethods.Create:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Add(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 2:
+                            case ProtocolMethods.Update:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Update(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 3:
+                            case ProtocolMethods.Buy:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Buy(request, client.boughtGames);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 4:
+                            case ProtocolMethods.Evaluate:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Evaluate(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 5:
+                            case ProtocolMethods.Search:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Search(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 6:
+                            case ProtocolMethods.Show:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Show(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 7:
+                            case ProtocolMethods.ShowAll:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.GetAll();
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 8:
+                            case ProtocolMethods.Reviews:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.GetReviews(request);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 9:
+                            case ProtocolMethods.Delete:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.Delete(request, clients);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 10:
+                            case ProtocolMethods.Exit:
                                 request = "Exit";
                                 if (!(client is null))
                                 {
                                     client.active = false;
                                 }
                                 break;
-                            case 11:
+                            case ProtocolMethods.SendImage:
                                 FileStreamHandler fileStreamHandler = new FileStreamHandler();
                                 await Protocol.Protocol.ReceiveFileAsync(networkStream, header, fileStreamHandler, true);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Se agrego caratula para el juego", ProtocolMethods.Response);
                                 break;
-                            case 12:
+                            case ProtocolMethods.UpdateRoute:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 Logic.UpdateRoute(request);
                                 break;
-                            case 13:
+                            case ProtocolMethods.ReceiveImage:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 var route = Logic.GetRouteImage(request);
                                 FileHandler fileHandler = new FileHandler();
                                 FileStreamHandler _fileStreamHandler = new FileStreamHandler();
-                                await Protocol.Protocol.SendFileAsync(networkStream, route, fileHandler, 1, request, _fileStreamHandler);
+                                await Protocol.Protocol.SendFileAsync(networkStream, route, fileHandler, ProtocolMethods.Success, request, _fileStreamHandler);
                                 break;
-                            case 14:
+                            case ProtocolMethods.ListBoughtGames:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 response = Logic.GetListBought(request, client.boughtGames);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
                                 break;
-                            case 15:
+                            case ProtocolMethods.Register:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 client = Logic.Register(request, clients);
-                                client.active = true;
+                                Logic.ActiveUser(client);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Se creo un nuevo usuario", ProtocolMethods.Response);
                                 break;
-                            case 16:
+                            case ProtocolMethods.Login:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 client = Logic.Login(request, clients);
                                 Logic.ActiveUser(client);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Se loggeo un nuevo usuario", ProtocolMethods.Response);
                                 break;
-                            case 17:
+                            case ProtocolMethods.Logout:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 Logic.ActiveUser(client);
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Hasta pronto!", ProtocolMethods.Response);
