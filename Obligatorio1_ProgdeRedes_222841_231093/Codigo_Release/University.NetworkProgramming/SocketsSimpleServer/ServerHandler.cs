@@ -29,7 +29,7 @@ namespace Server
 
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
-            Task acceptClients = Task.Run(() => AcceptClients(_tcpListener));            
+            Task.Run(() => AcceptClients(_tcpListener));            
             
             RunFuncionalitiesMenu();
             
@@ -49,6 +49,7 @@ namespace Server
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
+                    message = -1;
                 }
                 switch (message)
                 {
@@ -174,7 +175,7 @@ namespace Server
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
-                Task task = Task.Run(async () => await LogicServer.ClientHandlerAsync(_networkStream));
+                Task.Run(async () => await LogicServer.ClientHandlerAsync(_networkStream));
             }
         }
         private static int GetNumber(string number)

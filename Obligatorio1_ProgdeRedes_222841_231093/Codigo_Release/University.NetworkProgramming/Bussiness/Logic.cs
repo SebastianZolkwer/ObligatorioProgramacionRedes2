@@ -131,7 +131,6 @@ namespace Bussiness
                 }
             }
             return response;
-
         }
 
         public static string Delete(string data, List<Client> clients)
