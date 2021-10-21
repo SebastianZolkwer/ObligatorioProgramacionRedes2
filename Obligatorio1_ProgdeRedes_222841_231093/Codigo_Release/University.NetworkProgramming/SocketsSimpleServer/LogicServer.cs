@@ -129,7 +129,7 @@ namespace SocketsSimpleServer
             }
         }
 
-        public async static Task<string> ShowAllUsersAsync()
+        public static string ShowAllUsers()
         {
             string response = "";
             int clientsNumber = 1;
@@ -145,7 +145,7 @@ namespace SocketsSimpleServer
             return response;
         }
 
-        public static string DeleteUserAsync(string name, string password)
+        public static string DeleteUser(string name, string password)
         {
             string request = name + "-" + password;
             try
@@ -171,7 +171,7 @@ namespace SocketsSimpleServer
             }
         }
 
-        public async static Task<string> CreateNewUserAsync(string name, string password)
+        public static string  CreateNewUser(string name, string password)
         {
             string request = name + "-" + password;
             try

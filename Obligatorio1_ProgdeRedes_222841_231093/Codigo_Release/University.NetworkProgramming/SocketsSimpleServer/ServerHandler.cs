@@ -31,12 +31,12 @@ namespace Server
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
             Task acceptClients = Task.Run(() => AcceptClients(_tcpListener));            
             
-            RunFuncionalitiesMenuAsync();
+            RunFuncionalitiesMenu();
             
             runServer = false;
         }
 
-        private async Task RunFuncionalitiesMenuAsync()
+        private void  RunFuncionalitiesMenu()
         {
             int message = -1;
             while (message != 6)
@@ -53,36 +53,35 @@ namespace Server
                 switch (message)
                 {
                     case 1:
-                        await ShowAllGamesAsync();
+                         ShowAllGames();
                         break;
                     case 2:
-                        await CreateUserAsync();
+                         CreateUser();
                         break;
                     case 3:
-                        await UpdateUserAsync();
+                        UpdateUser();
                         break;
                     case 4:
-                        await DeleteUserAsync();
+                         DeleteUser();
                         break;
                     case 5:
-                        await ShowAllUsersAsync();
+                        ShowAllUsers();
                         break;
                     case 6:
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
-                }
-          
+                }  
             }
         }
 
-        private async Task ShowAllUsersAsync()
+        private void ShowAllUsers()
         {
-            Console.WriteLine(await LogicServer.ShowAllUsersAsync());
+            Console.WriteLine( LogicServer.ShowAllUsers());
         }
 
-        private async Task CreateUserAsync()
+        private void  CreateUser()
         {
             string name;
             string password;
@@ -91,10 +90,10 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-           Console.WriteLine(await LogicServer.CreateNewUserAsync(name, password));
+           Console.WriteLine(LogicServer.CreateNewUser(name, password));
         }
 
-        private async Task UpdateUserAsync()
+        private void UpdateUser()
         {
             string oldName;
             string oldPassword;
@@ -112,7 +111,7 @@ namespace Server
 
         }
 
-        private async Task DeleteUserAsync()
+        private void DeleteUser()
         {
             string name;
             string password;
@@ -121,10 +120,11 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            Console.WriteLine(LogicServer.DeleteUserAsync(name, password));
+            Console.WriteLine(LogicServer.DeleteUser(name, password));
 
         }
-        private async Task ShowAllGamesAsync()
+
+        private void  ShowAllGames()
         {
             try
             {
@@ -174,7 +174,7 @@ namespace Server
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
-                Task task = Task.Run(() => LogicServer.ClientHandlerAsync(_networkStream));
+                Task task = Task.Run(async () => await LogicServer.ClientHandlerAsync(_networkStream));
             }
         }
         private static int GetNumber(string number)
