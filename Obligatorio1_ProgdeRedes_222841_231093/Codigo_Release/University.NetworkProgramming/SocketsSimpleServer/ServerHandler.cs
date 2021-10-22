@@ -91,7 +91,7 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-           Console.WriteLine(LogicServer.CreateNewUser(name, password));
+            Console.WriteLine(LogicServer.CreateNewUser(name, password));
         }
 
         private void UpdateUser()
@@ -116,13 +116,11 @@ namespace Server
         {
             string name;
             string password;
-
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
             Console.WriteLine(LogicServer.DeleteUser(name, password));
-
         }
 
         private void  ShowAllGames()
