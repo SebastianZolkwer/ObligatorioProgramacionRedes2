@@ -20,10 +20,8 @@ namespace Files
                 {
                     throw new Exception("Cannot read file");
                 }
-
                 offset += read;
             }
-
             return response;
         }
 

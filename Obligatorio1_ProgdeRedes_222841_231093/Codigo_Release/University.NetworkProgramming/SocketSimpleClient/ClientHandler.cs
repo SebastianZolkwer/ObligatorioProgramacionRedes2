@@ -23,7 +23,6 @@ namespace SocketSimpleClient
             if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasClient"))
             {
                 Directory.Delete("CaratulasClient", true);
-
             }
             Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasClient");
             await tcpClient.ConnectAsync(IPAddress.Parse(GetIPAddressServer()), GetPortServer());
@@ -35,7 +34,6 @@ namespace SocketSimpleClient
         private int GetPortServer()
         {
             var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false).Build();
-
             int port = int.Parse(config.GetSection("portServer").Value.ToString());
             return port;
         }
@@ -43,7 +41,6 @@ namespace SocketSimpleClient
         private int GetPortClient()
         {
             var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false).Build();
-
             int port = int.Parse(config.GetSection("portClient").Value.ToString());
             return port;
         }

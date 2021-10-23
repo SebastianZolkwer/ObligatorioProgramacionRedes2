@@ -16,18 +16,12 @@ namespace Protocol
         public const int MaxPacketSize = 8192;
         public async static Task SendAndCodeAsync(NetworkStream networkStream, int method, String message, string direction)
         {
-
             Header header = new Header(direction, method, message.Length);
             byte[] data = header.GetRequest();
-
             byte[] values = Encoding.UTF8.GetBytes(message);
-
-
             await SendSpecificMessageAsync(networkStream, data);
             await SendSpecificMessageAsync(networkStream, values);
         }
-
-
 
         public static long CalculateParts(long size)
         {
@@ -35,14 +29,10 @@ namespace Protocol
             return parts * MaxPacketSize == size ? parts : parts + 1;
         }
 
-
-
         public async static Task SendSpecificMessageAsync(NetworkStream networkStream, byte[] dataLength)
         {
             await networkStream.WriteAsync(dataLength, 0, dataLength.Length);
         }
-
-
 
         public async static Task<Header> ReceiveAndDecodeFixDataAsync(NetworkStream networkStream, Header header)
         {
@@ -55,9 +45,6 @@ namespace Protocol
         public async static Task ReceiveFileAsync(NetworkStream networkStream, Header header, FileStreamHandler fileStreamHandler, bool servidor)
         {
             string data = await RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-
-
-
             string[] fileData = data.Split('!');
             string title = fileData[1];
             long fileSize = long.Parse(fileData[2]);
@@ -66,8 +53,6 @@ namespace Protocol
             long currentPart = 1;
             var nameFile = fileData[0].Split('.');
             string type = nameFile[nameFile.Length - 1];
-
-
             while (fileSize > offset)
             {
                 byte[] buffer;
@@ -82,7 +67,6 @@ namespace Protocol
                     buffer = await ReceiveDataAsync(networkStream, lastPartSize);
                     offset += lastPartSize;
                 }
-
                 if (servidor)
                 {
                     await fileStreamHandler.WriteDataAsync("CaratulasServer/" + title + "." + type, buffer);
@@ -91,7 +75,6 @@ namespace Protocol
                 {
                     await fileStreamHandler.WriteDataAsync("CaratulasClient/" + title + "." + type, buffer);
                 }
-
                 currentPart++;
             }
         }
@@ -132,7 +115,6 @@ namespace Protocol
             string fileData = fileName + "!" + title + "!" + fileSize;
             var bytesFileData = Encoding.UTF8.GetBytes(fileData);
             await SendSpecificMessageAsync(networkStream, bytesFileData);
-
             long parts = CalculateParts(fileSize);
             long offset = 0;
             long currentPart = 1;
@@ -155,6 +137,5 @@ namespace Protocol
                 currentPart++;
             }
         }
-
     }
 }

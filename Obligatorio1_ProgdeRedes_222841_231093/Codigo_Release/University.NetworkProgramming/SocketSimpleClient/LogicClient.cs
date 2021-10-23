@@ -17,7 +17,6 @@ namespace SocketSimpleClient
         private static bool logged = false;
         public async static Task WriteServerAsync(TcpClient tcpClient, NetworkStream networkStream)
         {
-
             Header header = new Header();
             try
             {
@@ -60,7 +59,6 @@ namespace SocketSimpleClient
                 }
                 switch (option)
                 {
-
                     case 1:
                         await CreateAsync(networkStream, header);
                         break;
@@ -135,7 +133,6 @@ namespace SocketSimpleClient
                 {
                     Console.WriteLine(e.Message);
                 }
-
                 switch (login)
                 {
                     case 1:
@@ -161,7 +158,6 @@ namespace SocketSimpleClient
         {
             string name;
             string password;
-
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
             Console.WriteLine("Ingrese su Password");
@@ -187,7 +183,6 @@ namespace SocketSimpleClient
         {
             string name;
             string password;
-   
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
             Console.WriteLine("Ingrese su Password");
@@ -229,8 +224,7 @@ namespace SocketSimpleClient
 
         private async static Task DeleteAsync(NetworkStream networkStream, Header header)
         {
-            string titleGame = "";
-
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere borrar");
             titleGame = Console.ReadLine();
             try
@@ -246,7 +240,7 @@ namespace SocketSimpleClient
 
         private async static Task ReviewsAsync(NetworkStream networkStream, Header header)
         {
-            string titleGame = "";
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere observar las calificaciones");
             titleGame = Console.ReadLine();
             try
@@ -275,7 +269,7 @@ namespace SocketSimpleClient
 
         private async static Task  ShowAsync(NetworkStream networkStream, Header header)
         {
-            string titleGame = "";
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere observar detalles");
             titleGame = Console.ReadLine();
             try
@@ -307,15 +301,13 @@ namespace SocketSimpleClient
                     } catch (SocketException)
                     {}
                 }
-            }
-            
+            } 
         }
         private async static Task SearchAsync(NetworkStream networkStream, Header header)
         {
-            string gender = "";
-            string rate = "";
-            string titleGame = "";
-
+            string gender;
+            string rate;
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere filtrar");
             titleGame = Console.ReadLine();
             Console.WriteLine("Ingrese calificacion por la quiere filtrar");
@@ -337,9 +329,7 @@ namespace SocketSimpleClient
         {
             string rate;
             string description;
-            string titleGame = "";
-            
-
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere calificar");
             titleGame = Console.ReadLine();
             Console.WriteLine("Ingrese calificacion de juego");
@@ -358,7 +348,7 @@ namespace SocketSimpleClient
 
         private  async static Task BuyAsync(NetworkStream networkStream, Header header)
         {
-            string titleGame = "";
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere comprar");
             titleGame = Console.ReadLine();
             try {
@@ -373,11 +363,10 @@ namespace SocketSimpleClient
 
         private async static Task UpdateAsync(NetworkStream networkStream, Header header)
         {
-            string title = "";
-            string gender = "";
-            string sinopsis = "";
-            string titleGame = "";
-
+            string title;
+            string gender;
+            string sinopsis;
+            string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere modificar");
             titleGame = Console.ReadLine();
             Console.WriteLine("Ingrese nuevo titulo de juego");
@@ -403,7 +392,6 @@ namespace SocketSimpleClient
             string gender;
             string sinopsis;
             string type = ".";
-
             Console.WriteLine("Ingrese titulo de juego");
             title = Console.ReadLine();
             Console.WriteLine("Ingrese genero");
@@ -419,11 +407,9 @@ namespace SocketSimpleClient
             }
             catch (SocketException)
             {}
-
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 string path = string.Empty;
-                
                 while (path == null ||  path.Equals(string.Empty) || !fileHandler.FileExists(path))
                 {
                     Console.WriteLine("Ingrese la ruta de la caratula");

@@ -177,7 +177,6 @@ namespace SocketsSimpleServer
             try
             {
                 Client client = Logic.Register(request, clients);
-                
                 return "Se ha creado un nuevo usuario, " + name;
             }catch(Exception e)
             {
