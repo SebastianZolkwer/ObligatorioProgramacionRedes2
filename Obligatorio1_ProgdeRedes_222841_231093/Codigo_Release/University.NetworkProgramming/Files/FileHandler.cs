@@ -16,7 +16,6 @@ namespace Files
             {
                 return new FileInfo(path).Name;
             }
-
             throw new Exception("File does not exist");
         }
 
@@ -26,7 +25,6 @@ namespace Files
             {
                 return new FileInfo(path).Length;
             }
-
             throw new Exception("File does not exist");
         }
     }

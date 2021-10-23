@@ -24,8 +24,7 @@ namespace Protocol
         }
 
         public Header()
-        {
-        }
+        {}
 
         public byte[] GetRequest()
         {

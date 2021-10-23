@@ -27,12 +27,9 @@ namespace Bussiness
                 Sinopsis = data[2].Trim(),
                 AverageQualification = 0,
                 SumOfQualification = 0
-
-
             };
             lock (gamesLock)
             {
-
                 if (GetGame(data[0]) != null) throw new Exception("Ya existe un juego con ese nombre\n");
                 games.Add(newGame);
             }
@@ -65,7 +62,6 @@ namespace Bussiness
         public static string Update(string information)
         {
             string[] data = information.Split("-");
-
             lock (gamesLock)
             {
                 Game game = GetGame(data[0]);
@@ -110,7 +106,6 @@ namespace Bussiness
 
         public static string GetAll()
         {
-
             string response = "";
             lock (gamesLock)
             {
@@ -126,7 +121,6 @@ namespace Bussiness
                         {
                             response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
                         }
-
                     }
                 }
             }
@@ -151,7 +145,6 @@ namespace Bussiness
                         client.boughtGames.Remove(deleteGame);
                     }
                 }
-
             }
             return "Fue borrado el juego\n";
         }
@@ -171,18 +164,15 @@ namespace Bussiness
                 {
                     throw new Exception("La calificacion debe ser un numero entre 1 y 10\n");
                 }
-
                 Review review = new Review
                 {
                     Rating = rate,
                     Description = data[2].Trim()
                 };
                 game.Qualifications.Add(review);
-
                 game.SumOfQualification += rate;
                 game.AverageQualification = game.SumOfQualification / game.Qualifications.Count;
             }
-
             return "Se evaluo el juego\n";
         }
 
@@ -233,7 +223,6 @@ namespace Bussiness
                     throw new Exception("El juego seleccionado aun no tiene caratula");
                 }
                 return imgRoute;
-
             }
         }
 
@@ -260,7 +249,6 @@ namespace Bussiness
                 }
                 return response;
             }
-
         }
 
         public static string DeleteUser(string request, List<Client> clients)
@@ -295,7 +283,6 @@ namespace Bussiness
                   throw new Exception("No fue encontrado el juego\n");
                }
                     game.ImageRoute = Directory.GetCurrentDirectory() + @"\CaratulasServer\" + data[0] + data[1];
-
             }
         }
 
@@ -316,7 +303,6 @@ namespace Bussiness
                 client.name = newName;
                 client.password = newPassword;
             }
-            
             return "Se ha modificado el usuario.";
         }
 
@@ -325,7 +311,6 @@ namespace Bussiness
             Game game;
             lock (gamesLock)
             {
-
                 game = GetGame(data);
             }
             if (game == null)
@@ -343,11 +328,7 @@ namespace Bussiness
             {
                 response += " Reviews:" + reviews;
             }
-            
-
             return response + "\n";
-
-
         }
 
         public static string GetReviews(string data)
@@ -362,7 +343,6 @@ namespace Bussiness
                 throw new Exception("No fue encontrado el juego\n");
             }
             string response = "";
-            
             foreach (Review review in game.Qualifications)
             {
                 response += "-" + review.Rating.ToString() + " " + review.Description;
