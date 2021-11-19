@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
+      "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
       "projectName": "File",
-      "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
+      "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
       "packagesPath": "C:\\Users\\alexp\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\obj\\",
+      "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alexp\\AppData\\Roaming\\NuGet\\NuGet.Config",
