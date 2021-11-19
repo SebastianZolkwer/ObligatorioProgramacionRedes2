@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {}
+    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj": {
+    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
+        "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
         "projectName": "File",
-        "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
+        "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj",
         "packagesPath": "C:\\Users\\alexp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\obj\\",
+        "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alexp\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -58,14 +58,14 @@
         }
       }
     },
-    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {
+    "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj",
+        "projectUniqueName": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj",
         "projectName": "Protocol",
-        "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj",
+        "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\Protocol.csproj",
         "packagesPath": "C:\\Users\\alexp\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\obj\\",
+        "outputPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Protocol\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alexp\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -82,8 +82,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj": {
-                "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio1_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj"
+              "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj": {
+                "projectPath": "C:\\Users\\alexp\\Desktop\\ObligatorioProgramacionRedes2\\Obligatorio2_ProgdeRedes_222841_231093\\Codigo_Release\\University.NetworkProgramming\\Files\\File.csproj"
               }
             }
           }

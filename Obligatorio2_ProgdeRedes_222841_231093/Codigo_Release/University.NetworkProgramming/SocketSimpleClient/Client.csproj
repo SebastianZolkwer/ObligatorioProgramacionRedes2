@@ -3,7 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <FileUpgradeFlags>40</FileUpgradeFlags>
-    <UpgradeBackupLocation>D:\Escritorio\Facultad\semestre6\programacionEnredes\Obligatorio1_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Backup3\SocketSimpleClient\</UpgradeBackupLocation>
+    <UpgradeBackupLocation>C:\Users\alexp\Desktop\ObligatorioProgramacionRedes2\Obligatorio2_ProgdeRedes_222841_231093\Codigo_Release\University.NetworkProgramming\Backup4\SocketSimpleClient\</UpgradeBackupLocation>
     <OldToolsVersion>Current</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
