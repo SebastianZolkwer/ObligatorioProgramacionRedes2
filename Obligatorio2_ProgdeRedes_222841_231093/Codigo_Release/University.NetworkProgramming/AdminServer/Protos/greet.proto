@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option csharp_namespace = "AdminServer";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc CreateGame (Request) returns (Response);
+  rpc UpdateGame (Request) returns (Response);
+  rpc BuyGame (RequestClient) returns (Response);
+  rpc EvaluateGame (Request) returns (Response);
+  rpc Show (Request) returns (Response);
+  rpc Search (Request) returns (Response);
+  rpc ShowAllGames (Request) returns (Response);
+  rpc ReviewsGame (Request) returns (Response);
+  rpc DeleteGame (Request) returns (Response);
+  rpc ReceiveImage (Request) returns (Response);
+  rpc SendImage (Request) returns (Response);
+  rpc BoughtGames (RequestClient) returns (Response);
+  rpc Register (Request) returns (ResponseClient);
+  rpc Login (Request) returns (ResponseClient);
+  rpc LogOut (Request) returns (Response);
+  rpc ShowAllUsers (Request) returns (Response);
+  rpc DeleteUser (Request) returns (Response);
+  rpc UpdateUser (Request) returns (Response);
+
+}
+
+// The request message containing the user's name.
+message Request {
+  string attributes = 1;
+}
+
+message RequestClient {
+  string attributes = 1;
+  string name = 2;
+}
+
+// The response message containing the greetings.
+message Response {
+  string message = 1;
+}
+
+message ResponseClient {
+  string name = 1;
+  string message = 2;
+}

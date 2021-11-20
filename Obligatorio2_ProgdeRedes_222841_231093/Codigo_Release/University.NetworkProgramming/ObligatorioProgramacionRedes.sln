@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol", "Protocol\Protoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bussiness", "Bussiness\Bussiness.csproj", "{F0BEAD1B-A758-45E8-829C-4FB0BDC37CE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "File", "Files\File.csproj", "{FB7733B3-0182-4F7A-A81A-CFD70CAAC03C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "File", "Files\File.csproj", "{FB7733B3-0182-4F7A-A81A-CFD70CAAC03C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminServer", "AdminServer\AdminServer.csproj", "{B6E6B05E-327F-453C-B868-4FF52DDDFECA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{FB7733B3-0182-4F7A-A81A-CFD70CAAC03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7733B3-0182-4F7A-A81A-CFD70CAAC03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB7733B3-0182-4F7A-A81A-CFD70CAAC03C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6E6B05E-327F-453C-B868-4FF52DDDFECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6E6B05E-327F-453C-B868-4FF52DDDFECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6E6B05E-327F-453C-B868-4FF52DDDFECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6E6B05E-327F-453C-B868-4FF52DDDFECA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

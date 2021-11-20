@@ -79,7 +79,7 @@ namespace Server
 
         private void ShowAllUsers()
         {
-            Console.WriteLine( LogicServer.ShowAllUsers());
+            Console.WriteLine( LogicServer.ShowAllUsersAsync());
         }
 
         private void  CreateUser()
@@ -91,7 +91,7 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            Console.WriteLine(LogicServer.CreateNewUser(name, password));
+            Console.WriteLine(LogicServer.CreateNewUserAsync(name, password));
         }
 
         private void UpdateUser()
@@ -120,7 +120,7 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            Console.WriteLine(LogicServer.DeleteUser(name, password));
+            Console.WriteLine(LogicServer.DeleteUserAsync(name, password));
         }
 
         private void  ShowAllGames()
