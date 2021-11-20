@@ -31,6 +31,7 @@ namespace SocketsSimpleServer
                         var header = new Header();
                         header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                         Response response;
+                        ResponseClient responseClient;
                         switch (header.GetMethod())
                         {
                             case ProtocolMethods.Create:
@@ -39,7 +40,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Update:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -47,7 +48,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Buy:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -56,7 +57,7 @@ namespace SocketsSimpleServer
                                     Attributes = request,
                                     Name = client
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Evaluate:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -64,7 +65,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Search:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -72,7 +73,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Show:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -80,7 +81,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.ShowAll:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -88,7 +89,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Reviews:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -96,7 +97,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Delete:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -104,7 +105,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = request
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Exit:
                                 request = "Exit";
@@ -136,25 +137,25 @@ namespace SocketsSimpleServer
                                     Name = client,
                                     Attributes = client
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Register:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                ResponseClient responseClient = await user.RegisterAsync(new Request
+                                responseClient = await user.RegisterAsync(new Request
                                 {
                                     Attributes = request
                                 });
                                 client = responseClient.Name;
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, responseClient.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, responseClient.Status, responseClient.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Login:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                ResponseClient responseClient2 = await user.LoginAsync(new Request
+                                responseClient = await user.LoginAsync(new Request
                                 {
                                     Attributes = request
                                 });
-                                client = responseClient2.Name;
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, responseClient2.Message, ProtocolMethods.Response);
+                                client = responseClient.Name;
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, responseClient.Status, responseClient.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Logout:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -162,7 +163,7 @@ namespace SocketsSimpleServer
                                 {
                                     Attributes = client
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                         }
                     }

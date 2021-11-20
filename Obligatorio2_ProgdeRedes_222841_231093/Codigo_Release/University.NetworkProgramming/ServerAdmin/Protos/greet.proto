@@ -40,9 +40,11 @@ message RequestClient {
 // The response message containing the greetings.
 message Response {
   string message = 1;
+  int32 status = 2;
 }
 
 message ResponseClient {
   string name = 1;
   string message = 2;
+  int32 status = 3;
 }
