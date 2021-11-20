@@ -1,7 +1,9 @@
 ﻿using Bussiness;
 using Bussiness.Domain;
 using Files;
+using Grpc.Net.Client;
 using Protocol;
+using ServerAdmin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,72 +16,102 @@ namespace SocketsSimpleServer
 {
     public static class LogicServer
     {
-        private static List<Client> clients = new List<Client>();
+        private static GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:5001");
+        private static Greeter.GreeterClient user = new Greeter.GreeterClient(channel);
         public async static Task ClientHandlerAsync(NetworkStream networkStream)
         {
             {
                 string request = "";
-                Client client = null;
+                string client = null;
+
                 while (request != "Exit")
                 {
                     try
                     {
                         var header = new Header();
                         header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
-                        string response;
+                        Response response;
                         switch (header.GetMethod())
                         {
                             case ProtocolMethods.Create:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Add(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.CreateGameAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Update:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Update(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.UpdateGameAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Buy:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Buy(request, client.boughtGames);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.BuyGameAsync(new RequestClient
+                                {
+                                    Attributes = request,
+                                    Name = client
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Evaluate:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Evaluate(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.EvaluateGameAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Search:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Search(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.SearchAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Show:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Show(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.ShowAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.ShowAll:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.GetAll();
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.ShowAllGamesAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Reviews:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.GetReviews(request);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.ReviewsGameAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Delete:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.Delete(request, clients);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.DeleteGameAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Exit:
                                 request = "Exit";
-                                if (!(client is null))
+                                response = await user.LogOutAsync(new Request
                                 {
-                                    client.active = false;
-                                }
+                                    Attributes = client
+                                });
                                 break;
                             case ProtocolMethods.SendImage:
                                 FileStreamHandler fileStreamHandler = new FileStreamHandler();
@@ -99,25 +131,38 @@ namespace SocketsSimpleServer
                                 break;
                             case ProtocolMethods.ListBoughtGames:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = Logic.GetListBought(request, client.boughtGames);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response, ProtocolMethods.Response);
+                                response = await user.BoughtGamesAsync(new RequestClient
+                                {
+                                    Name = client,
+                                    Attributes = client
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Register:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                client = Logic.Register(request, clients);
-                                Logic.ActiveUser(client);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Se creo un nuevo usuario", ProtocolMethods.Response);
+                                ResponseClient responseClient = await user.RegisterAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                client = responseClient.Name;
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, responseClient.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Login:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                client = Logic.Login(request, clients);
-                                Logic.ActiveUser(client);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Se loggeo un nuevo usuario", ProtocolMethods.Response);
+                                ResponseClient responseClient2 = await user.LoginAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                client = responseClient2.Name;
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, responseClient2.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Logout:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                Logic.ActiveUser(client);
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, "Hasta pronto!", ProtocolMethods.Response);
+                                response = await user.LogOutAsync(new Request
+                                {
+                                    Attributes = client
+                                });
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Success, response.Message, ProtocolMethods.Response);
                                 break;
                         }
                     }
@@ -129,59 +174,53 @@ namespace SocketsSimpleServer
             }
         }
 
-        public static string ShowAllUsers()
+        public static async Task<string> ShowAllGamesAsync()
         {
-            string response = "";
-            int clientsNumber = 1;
-            if(clients.Count == 0)
+            Response response = await user.ShowAllGamesAsync(new Request
             {
-                response = "No existen usuarios registrados en el sistema.";
-            }
-            foreach(Client client in clients)
-            {
-                response = response + clientsNumber + ". Nombre: " + client.name + "\n";
-                clientsNumber++;
-            }
-            return response;
+                Attributes = ""
+            });
+            return response.Message;
         }
 
-        public static string DeleteUser(string name, string password)
+        public static async Task<string> ShowAllUsersAsync()
+        {
+            Response response =  await user.ShowAllUsersAsync(new Request
+            {
+                Attributes = ""
+            });
+            return response.Message;
+        }
+
+        public static async Task<string> DeleteUserAsync(string name, string password)
+
         {
             string request = name + "-" + password;
-            try
+            Response response =  await user.DeleteUserAsync(new Request
             {
-                return Logic.DeleteUser(request, clients);
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
+                Attributes = request
+            });
+            return response.Message;
         }
 
-        public static string UpdateUserAsync(string oldName, string oldPassword, string newName, string newPassword)
+        public static async Task<string> UpdateUserAsync(string oldName, string oldPassword, string newName, string newPassword)
         {
             string request = oldName + "-" + oldPassword + "-" + newName + "-" + newPassword;
-            try
+            Response response =  await user.UpdateUserAsync(new Request
             {
-                return Logic.UpdateUser(request, clients);
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
+                Attributes = request
+            });
+            return response.Message;
         }
 
-        public static string  CreateNewUser(string name, string password)
-        {
+        public static async Task<string>  CreateNewUserAsync(string name, string password)
+        { 
             string request = name + "-" + password;
-            try
+            ResponseClient responseClient =  await user.RegisterAsync(new Request
             {
-                Client client = Logic.Register(request, clients);
-                return "Se ha creado un nuevo usuario, " + name;
-            }catch(Exception e)
-            {
-                return e.Message;
-            }
+                Attributes = request
+            });
+            return responseClient.Message + " " +   name;
         }
     }
 }
