@@ -22,11 +22,15 @@ namespace SocketSimpleClient
             {
                 await ManageClientAsync(tcpClient, networkStream, header);
                 await ActionMenuAsync(tcpClient, networkStream, header);
+
             }
             catch (IOException)
             {
                 Console.WriteLine("Se cerro la conexion del servidor");
+                connected = false;
+                logged = true;
             }
+            
             networkStream.Close();
             tcpClient.Close();
         }
@@ -185,6 +189,7 @@ namespace SocketSimpleClient
             string password;
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
+            
             Console.WriteLine("Ingrese su Password");
             password = Console.ReadLine();
             try

@@ -12,6 +12,7 @@ namespace Bussiness
     public static class Logic
     {
         public static List<Game> games = new List<Game>();
+        private static List<Client> clients = new List<Client>();
         private static readonly object gamesLock = new Object();
         private static readonly object clientsLock = new Object();
         public static string Add(string information)
@@ -36,7 +37,7 @@ namespace Bussiness
             return "Fue agregado el juego\n";
         }
 
-        public static Client Register(string request, List<Client> clients)
+        public static Client Register(string request)
         {
             string[] data = request.Split("-");
             string name = data[0];
@@ -49,6 +50,10 @@ namespace Bussiness
                 }
                 Client client = new Client(name, password);
                 clients.Add(client);
+                if (client != null)
+                {
+                    ActiveUser(client);
+                }
                 return client;
             }
         }
@@ -59,6 +64,12 @@ namespace Bussiness
             return game;
         }
 
+        private static Client GetClient(string name)
+        {
+            Client user = clients.FirstOrDefault(client => client.name == name);
+            return user;
+        }
+
         public static string Update(string information)
         {
             string[] data = information.Split("-");
@@ -67,31 +78,34 @@ namespace Bussiness
                 Game game = GetGame(data[0]);
                 if (game == null) throw new Exception("No existe el juego seleccionado para modificar\n");
                 if (String.IsNullOrEmpty(data[1]) && String.IsNullOrEmpty(data[2]) && String.IsNullOrEmpty(data[3])) throw new Exception("No paso ningun parametro para modificar el juego\n");
-                if (!String.IsNullOrEmpty(data[1])) {
+                if (!String.IsNullOrEmpty(data[1]))
+                {
                     if (GetGame(data[1]) != null)
                     {
                         throw new Exception("Ya existe un juego con ese nombre\n");
                     }
                     game.Title = data[1];
                 }
-                if (!String.IsNullOrEmpty(data[2])) {
+                if (!String.IsNullOrEmpty(data[2]))
+                {
                     game.Gender = data[2];
                 }
-                if (!String.IsNullOrEmpty(data[3])){
+                if (!String.IsNullOrEmpty(data[3]))
+                {
                     game.Sinopsis = data[3];
                 }
                 return "Fue modificado el juego\n";
             }
         }
 
-        public static Client Login(string request, List<Client> clients)
+        public static Client Login(string request)
         {
             string[] data = request.Split("-");
             string name = data[0];
             string password = data[1];
             lock (clientsLock)
             {
-                Client client = clients.FirstOrDefault(c => c.name == name);
+                Client client = GetClient(name);
                 if (client is null)
                 {
                     throw new Exception("No existe usuario con ese nombre, reescriba o registrese.\n");
@@ -99,6 +113,10 @@ namespace Bussiness
                 if (client.password != password)
                 {
                     throw new Exception("Password incorrecta");
+                }
+                if (client != null)
+                {
+                    ActiveUser(client);
                 }
                 return client;
             }
@@ -127,7 +145,37 @@ namespace Bussiness
             return response;
         }
 
-        public static string Delete(string data, List<Client> clients)
+        public static string LogOut(string name)
+        {
+            lock (clientsLock)
+            {
+                Client client = GetClient(name);
+                DisactivateUser(client);
+                return "Hasta pronto!!\n";
+            }
+        }
+
+        public static string ShowAllUsers()
+        {
+            string response = "";
+            int clientsNumber = 1;
+            lock (clientsLock)
+            {
+                if (clients.Count == 0)
+                {
+                    response = "No existen usuarios registrados en el sistema.";
+                }
+                foreach (Client client in clients)
+                {
+                    response = response + clientsNumber + ". Nombre: " + client.name + "\n";
+                    clientsNumber++;
+                }
+            }
+            return response;
+
+        }
+
+        public static string Delete(string data)
         {
             lock (gamesLock)
             {
@@ -137,7 +185,7 @@ namespace Bussiness
                     throw new Exception("No fue encontrado el juego \n");
                 }
                 games.Remove(game);
-                foreach(Client client in clients)
+                foreach (Client client in clients)
                 {
                     Game deleteGame = client.boughtGames.FirstOrDefault(game => game.Title == data.Trim());
                     if (deleteGame != null)
@@ -218,7 +266,7 @@ namespace Bussiness
                     throw new Exception("No fue encontrado el juego\n");
                 }
                 string imgRoute = game.ImageRoute;
-                if(imgRoute is null)
+                if (imgRoute is null)
                 {
                     throw new Exception("El juego seleccionado aun no tiene caratula");
                 }
@@ -234,16 +282,25 @@ namespace Bussiness
             }
         }
 
-        public static string GetListBought(string request, List<Game> boughtGames)
+        public static void DisactivateUser(Client client)
         {
-            if (boughtGames.Count == 0)
+            lock (clientsLock)
+            {
+                client.active = false;
+            }
+        }
+
+        public static string GetListBought(string name)
+        {
+            Client client = GetClient(name);
+            if (client.boughtGames.Count == 0)
             {
                 throw new Exception("No hay juegos comprados \n");
             }
             else
             {
                 string response = "Lista de juegos:\n";
-                foreach (Game game in games)
+                foreach (Game game in client.boughtGames)
                 {
                     response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
                 }
@@ -251,7 +308,7 @@ namespace Bussiness
             }
         }
 
-        public static string DeleteUser(string request, List<Client> clients)
+        public static string DeleteUser(string request)
         {
             string[] data = request.Split("-");
             string name = data[0];
@@ -278,15 +335,15 @@ namespace Bussiness
             lock (gamesLock)
             {
                 Game game = GetGame(data[0]);
-               if (game == null)
-               {
-                  throw new Exception("No fue encontrado el juego\n");
-               }
-                    game.ImageRoute = Directory.GetCurrentDirectory() + @"\CaratulasServer\" + data[0] + data[1];
+                if (game == null)
+                {
+                    throw new Exception("No fue encontrado el juego\n");
+                }
+                game.ImageRoute = Directory.GetCurrentDirectory() + @"\CaratulasServer\" + data[0] + data[1];
             }
         }
 
-        public static string UpdateUser(string request, List<Client> clients)
+        public static string UpdateUser(string request)
         {
             string[] data = request.Split("-");
             string oldName = data[0];
@@ -320,7 +377,7 @@ namespace Bussiness
             string response = "";
             response += "Titulo:" + game.Title + " " + "Genero:" + game.Gender + " " + "Sinopsis:" + game.Sinopsis + " Promedio de calificacion:" + game.AverageQualification;
             string reviews = GetReviews(game.Title);
-            if(reviews == "")
+            if (reviews == "")
             {
                 response += " No hay reviews para este juego";
             }
@@ -350,23 +407,28 @@ namespace Bussiness
             return response;
         }
 
-        public static string Buy(string data, List<Game> boughtGames)
+        public static string Buy(string data, string name)
         {
             Game game;
-            lock (gamesLock)
+            lock (clientsLock)
             {
-                game = GetGame(data);
+                Client client = GetClient(name);
+                lock (gamesLock)
+                {
+                    game = GetGame(data);
+                }
+                if (game == null)
+                {
+                    throw new Exception("No fue encontrado el juego\n");
+                }
+                else if (client.boughtGames.FirstOrDefault(game => game.Title == data.Trim()) != null)
+                {
+                    throw new Exception("Ya se compro este juego\n");
+                }
+                client.boughtGames.Add(game);
+                return "Se compro el juego\n";
             }
-            if (game == null)
-            {
-                throw new Exception("No fue encontrado el juego\n");
-            }
-            else if (boughtGames.FirstOrDefault(game => game.Title == data.Trim()) != null)
-            {
-                throw new Exception("Ya se compro este juego\n");
-            }
-            boughtGames.Add(game);
-            return "Se compro el juego\n";
+
         }
 
         private static int GetNumber(string number)
