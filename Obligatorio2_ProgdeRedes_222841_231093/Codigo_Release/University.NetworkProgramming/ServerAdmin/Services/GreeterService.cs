@@ -1,4 +1,5 @@
 using Bussiness;
+using Bussiness.Domain;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Protocol;
@@ -201,7 +202,7 @@ namespace ServerAdmin
             ResponseClient response = new ResponseClient();
             try
             {
-                response.Message = Logic.Login(request.Attributes).name;
+                response.Name = Logic.Login(request.Attributes).name;
                 response.Status = ProtocolMethods.Success;
                 response.Message = "Bienvenido al sistema nuevamente";
             }
@@ -218,7 +219,7 @@ namespace ServerAdmin
             ResponseClient response = new ResponseClient();
             try
             {
-                response.Message = Logic.Register(request.Attributes).name;
+                response.Name = Logic.Register(request.Attributes).name;
                 response.Status = ProtocolMethods.Success;
                 response.Message = "Se creo un nuevo usuario";
             }
@@ -283,6 +284,22 @@ namespace ServerAdmin
             try
             {
                 response.Message = Logic.UpdateUser(request.Attributes);
+                response.Status = ProtocolMethods.Success;
+            }
+            catch (Exception e)
+            {
+                response.Message = e.Message;
+                response.Status = ProtocolMethods.Error;
+            }
+            return Task.FromResult(response);
+        }
+
+        public override Task<Response> UpdateRoute(Request request, ServerCallContext context)
+        {
+            Response response = new Response();
+            try
+            {
+                Logic.UpdateRoute(request.Attributes);
                 response.Status = ProtocolMethods.Success;
             }
             catch (Exception e)
