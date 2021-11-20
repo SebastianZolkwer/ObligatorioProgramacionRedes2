@@ -24,6 +24,7 @@ service Greeter {
   rpc ShowAllUsers (Request) returns (Response);
   rpc DeleteUser (Request) returns (Response);
   rpc UpdateUser (Request) returns (Response);
+  rpc UpdateRoute(Request) returns (Response);
 
 }
 

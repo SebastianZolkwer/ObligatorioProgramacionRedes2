@@ -121,7 +121,11 @@ namespace SocketsSimpleServer
                                 break;
                             case ProtocolMethods.UpdateRoute:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                Logic.UpdateRoute(request);
+                                response = await user.UpdateRouteAsync(new Request
+                                {
+                                    Attributes = request
+                                });
+                                
                                 break;
                             case ProtocolMethods.ReceiveImage:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
