@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Bussiness.Domain
 {
-    class Log
+    public class Log
     {
+        public string clientName { get; set; }
+        public string gameTitle { get; set; }
+        public string date { get; set; }
     }
 }
