@@ -11,6 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicInterface\BusinessLogicInterface.csproj" />
     <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
+    <ProjectReference Include="..\DataAccessInterface\DataAccessInterface.csproj" />
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
