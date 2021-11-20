@@ -1,7 +1,9 @@
+using LogProducerConsumer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,12 @@ namespace WebApiLogs
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using IConnection connection = factory.CreateConnection();
+            using IModel channel = connection.CreateModel();
+
+            LogConsumer.DeclareQueue(channel);
+            LogConsumer.ReceiveMessages(channel);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
