@@ -20,7 +20,6 @@ namespace Factory
 			services.AddScoped<IClientLogic, ClientLogic>();
 			services.AddScoped<IGameLogic, GameLogic>();
 			services.AddScoped<ILogLogic, LogLogic>();
-			services.AddScoped<ILogRepository, LogRepository>();
 		}
 	}
 }

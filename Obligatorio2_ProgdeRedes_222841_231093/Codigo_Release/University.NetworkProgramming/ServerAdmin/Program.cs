@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,9 @@ namespace ServerAdmin
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            /*var factory = new ConnectionFactory { HostName = "localhost" };
+            using IConnection connection = factory.CreateConnection();
+            LogConnection.SetChannel(connection);*/
         }
 
         // Additional configuration is required to successfully run gRPC on macOS.

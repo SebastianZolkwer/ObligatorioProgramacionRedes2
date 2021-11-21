@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("users")]
+    [Route("logs")]
     public class LogController : ControllerBase
     {
 
         private ILogLogic logLogic;
 
-        public LogController(ILogLogic _userLogic)
+        public LogController(ILogLogic logLogic)
         {
-            this.logLogic = _userLogic;
+            this.logLogic = logLogic;
         }
 
         [HttpGet()]
