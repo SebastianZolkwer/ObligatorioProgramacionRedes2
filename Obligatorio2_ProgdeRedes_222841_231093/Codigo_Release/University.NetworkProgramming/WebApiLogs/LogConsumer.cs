@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using Bussiness.Domain;
+using DataAccess;
 using DataAccessInterface;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -11,12 +12,7 @@ namespace LogProducerConsumer
     {
         private const string SimpleQueueName = "n6aBasicQueue";
 
-        private ILogRepository logRepository;
 
-        public LogConsumer (ILogRepository _logRepository)
-        {
-            this.logRepository = _logRepository;
-        }
 
         public static void DeclareQueue(IModel channel)
         {
@@ -41,8 +37,8 @@ namespace LogProducerConsumer
             {
                 byte[] body = ea.Body.ToArray();
                 string message = Encoding.UTF8.GetString(body);
-                LogRepository.Add()
-                Console.WriteLine("Received message : " + message);
+                Log log = new Log(message);
+                LogRepository.Add(log);
             };
 
             channel.BasicConsume(
