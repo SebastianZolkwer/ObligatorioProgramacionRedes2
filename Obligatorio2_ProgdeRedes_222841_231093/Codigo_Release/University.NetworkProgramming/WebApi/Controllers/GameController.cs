@@ -22,30 +22,30 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBodyAttribute] Game game)
+        public async Task<IActionResult> CreateAsync([FromBody] Game game)
         {
-            var gameCreated = gameLogic.Create(game);
+            var gameCreated = await gameLogic.CreateAsync(game);
             return Ok(gameCreated);
         }
 
         [HttpGet]
-        public IActionResult Get([FromBodyAttribute] string title)
+        public async Task<IActionResult> GetAsync([FromQuery] string title)
         {
-            var game = gameLogic.Get(title);
+            var game = await gameLogic.GetAsync(title);
             return Ok(game);
         }
 
         [HttpPost]
-        public IActionResult Update([FromBodyAttribute] Game game)
+        public async Task<IActionResult> UpdateAsync([FromQuery] string title, [FromBody] Game game)
         {
-            var gameUpdated = gameLogic.Update(game);
+            var gameUpdated = await gameLogic.UpdateAsync(title,game);
             return Ok(gameUpdated);
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBodyAttribute] string title)
+        public async Task<IActionResult> Delete([FromQuery] string title)
         {
-            var game = gameLogic.Delete(title);
+            var game = await gameLogic.DeleteAsync(title);
             return Ok(game);
         }
     }

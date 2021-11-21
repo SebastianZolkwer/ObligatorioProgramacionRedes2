@@ -16,5 +16,23 @@ namespace Bussiness.Domain
         public string Sinopsis { get; set;  }
 
         public string ImageRoute { get; set; }
+
+        public void Validate()
+        {
+            if (String.IsNullOrEmpty(this.Title))
+            {
+                throw new InvalidOperationException("El titulo no puede ser nulo or vacio");
+            }
+            if (String.IsNullOrEmpty(this.Gender))
+            {
+                throw new InvalidOperationException("El genero no puede ser nulo or vacio");
+            }
+            if (String.IsNullOrEmpty(this.Sinopsis))
+            {
+                throw new InvalidOperationException("La sinopsis ser nula or vacia");
+            }
+        }
     }
+
+    
 }

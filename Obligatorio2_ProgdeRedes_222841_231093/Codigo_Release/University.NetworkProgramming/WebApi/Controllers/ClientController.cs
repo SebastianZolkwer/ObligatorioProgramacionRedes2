@@ -2,6 +2,7 @@
 using Bussiness.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,37 +23,37 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBodyAttribute] Client user)
+        public async Task<IActionResult> CreateUserAsync([FromBody] Client user)
         {
-            var userCreated = clientLogic.Create(user);
+            var userCreated = await clientLogic.CreateAsync(user);
             return Ok(userCreated);
         }
 
         [HttpGet]
-        public IActionResult Get([FromBodyAttribute] string name)
+        public async Task<IActionResult> GetAsync()
         {
-            var user = clientLogic.Get(name);
+            var user = await clientLogic.GetAllAsync();
             return Ok(user);
         }
 
         [HttpPost]
-        public IActionResult Update([FromBodyAttribute] Client user)
+        public async Task<IActionResult> UpdateAsync([FromBody] Client oldClient, [FromBody] Client newClient)
         {
-            var userUpdated = clientLogic.Update(user);
+            var userUpdated = await clientLogic.UpdateAsync(oldClient, newClient);
             return Ok(userUpdated);
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBodyAttribute] string name)
+        public async Task<IActionResult> DeleteAsync([FromBody] Client client)
         {
-            var user = clientLogic.Delete(name);
+            var user = await clientLogic.DeleteAsync(client);
             return Ok(user);
         }
 
         [HttpPost]
-        public IActionResult BuyGame([FromBodyAttribute] string gameTitle)
+        public async Task<IActionResult> BuyGameAsync([FromBody] UserBuyGame gameBuy)
         {
-            var message = clientLogic.Buy(gameTitle);
+            var message = await clientLogic.BuyAsync(gameBuy);
             return Ok(message);
         }
     }

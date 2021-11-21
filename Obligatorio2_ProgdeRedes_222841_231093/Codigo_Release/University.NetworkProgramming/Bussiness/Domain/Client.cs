@@ -22,6 +22,17 @@ namespace Bussiness.Domain
             boughtGames = new List<Game>();
             this.active = false;
         }
+        public void Validate()
+        {
+            if (String.IsNullOrEmpty(this.name))
+            {
+                throw new InvalidOperationException("El nombre no puede ser nulo or vacio");
+            }
+            if (String.IsNullOrEmpty(this.password))
+            {
+                throw new InvalidOperationException("La contraseña no puede ser nula or vacia");
+            }
+        }
     }
     
 }
