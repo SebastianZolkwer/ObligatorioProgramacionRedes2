@@ -44,7 +44,7 @@ namespace Bussiness
             string password = data[1];
             lock (clientsLock)
             {
-                if (clients.Any(c => c.name == name))
+                if (clients.Any(c => c.Name == name))
                 {
                     throw new Exception("Ya existe un usuario con ese nombre.\n");
                 }
@@ -66,7 +66,7 @@ namespace Bussiness
 
         private static Client GetClient(string name)
         {
-            Client user = clients.FirstOrDefault(client => client.name == name);
+            Client user = clients.FirstOrDefault(client => client.Name == name);
             return user;
         }
 
@@ -110,7 +110,7 @@ namespace Bussiness
                 {
                     throw new Exception("No existe usuario con ese nombre, reescriba o registrese.\n");
                 }
-                if (client.password != password)
+                if (client.Password != password)
                 {
                     throw new Exception("Password incorrecta");
                 }
@@ -137,7 +137,7 @@ namespace Bussiness
                     {
                         foreach (Game game in games)
                         {
-                            response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
+                            response += " -Titulo:" + game.Title + "-Genero:" + game.Gender + "\n";
                         }
                     }
                 }
@@ -163,11 +163,11 @@ namespace Bussiness
             {
                 if (clients.Count == 0)
                 {
-                    response = "No existen usuarios registrados en el sistema.";
+                    throw new Exception("No existen usuarios registrados en el sistema");
                 }
                 foreach (Client client in clients)
                 {
-                    response = response + clientsNumber + ". Nombre: " + client.name + "\n";
+                    response = response + clientsNumber + ". Nombre: " + client.Name + "\n";
                     clientsNumber++;
                 }
             }
@@ -187,10 +187,10 @@ namespace Bussiness
                 games.Remove(game);
                 foreach (Client client in clients)
                 {
-                    Game deleteGame = client.boughtGames.FirstOrDefault(game => game.Title == data.Trim());
+                    Game deleteGame = client.BoughtGames.FirstOrDefault(game => game.Title == data.Trim());
                     if (deleteGame != null)
                     {
-                        client.boughtGames.Remove(deleteGame);
+                        client.BoughtGames.Remove(deleteGame);
                     }
                 }
             }
@@ -278,7 +278,7 @@ namespace Bussiness
         {
             lock (clientsLock)
             {
-                client.active = true;
+                client.Active = true;
             }
         }
 
@@ -286,21 +286,21 @@ namespace Bussiness
         {
             lock (clientsLock)
             {
-                client.active = false;
+                client.Active = false;
             }
         }
 
         public static string GetListBought(string name)
         {
             Client client = GetClient(name);
-            if (client.boughtGames.Count == 0)
+            if (client.BoughtGames.Count == 0)
             {
                 throw new Exception("No hay juegos comprados \n");
             }
             else
             {
                 string response = "Lista de juegos:\n";
-                foreach (Game game in client.boughtGames)
+                foreach (Game game in client.BoughtGames)
                 {
                     response += " -Titulo:" + game.Title + " Genero:" + game.Gender + "\n";
                 }
@@ -308,19 +308,16 @@ namespace Bussiness
             }
         }
 
-        public static string DeleteUser(string request)
+        public static string DeleteUser(string name)
         {
-            string[] data = request.Split("-");
-            string name = data[0];
-            string password = data[1];
             lock (clientsLock)
             {
-                Client client = clients.FirstOrDefault(c => c.name == name && c.password == password);
+                Client client = clients.FirstOrDefault(c => c.Name == name);
                 if (client is null)
                 {
                     throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
                 }
-                if (client.active)
+                if (client.Active)
                 {
                     throw new Exception("No es posible eliminar usuarios activos.\n");
                 }
@@ -347,18 +344,17 @@ namespace Bussiness
         {
             string[] data = request.Split("-");
             string oldName = data[0];
-            string oldPassword = data[1];
-            string newName = data[2];
-            string newPassword = data[3];
+            string newName = data[1];
+            string newPassword = data[2];
             lock (clientsLock)
             {
-                Client client = clients.FirstOrDefault(c => c.name == oldName && c.password == oldPassword);
+                Client client = clients.FirstOrDefault(c => c.Name == oldName);
                 if (client is null)
                 {
                     throw new Exception("No fue encontrado el usuario con ese nombre y contrasena.\n");
                 }
-                client.name = newName;
-                client.password = newPassword;
+                client.Name = newName;
+                client.Password = newPassword;
             }
             return "Se ha modificado el usuario.";
         }
@@ -421,11 +417,11 @@ namespace Bussiness
                 {
                     throw new Exception("No fue encontrado el juego\n");
                 }
-                else if (client.boughtGames.FirstOrDefault(game => game.Title == data.Trim()) != null)
+                else if (client.BoughtGames.FirstOrDefault(game => game.Title == data.Trim()) != null)
                 {
                     throw new Exception("Ya se compro este juego\n");
                 }
-                client.boughtGames.Add(game);
+                client.BoughtGames.Add(game);
                 return "Se compro el juego\n";
             }
 

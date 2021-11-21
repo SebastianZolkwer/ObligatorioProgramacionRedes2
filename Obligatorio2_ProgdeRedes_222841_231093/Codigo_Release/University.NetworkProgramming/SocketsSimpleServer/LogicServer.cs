@@ -32,25 +32,26 @@ namespace SocketsSimpleServer
                         header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                         Response response;
                         ResponseClient responseClient;
+                        GameResponse gameResponse;
                         switch (header.GetMethod())
                         {
                             case ProtocolMethods.Create:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = await user.CreateGameAsync(new Request
+                                gameResponse = await user.CreateGameAsync(new Request
                                 {
                                     Attributes = request,
                                     Name = client
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, gameResponse.Status, gameResponse.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Update:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                response = await user.UpdateGameAsync(new Request
+                                gameResponse = await user.UpdateGameAsync(new Request
                                 {
                                     Attributes = request,
                                     Name = client
                                 });
-                                await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
+                                await Protocol.Protocol.SendAndCodeAsync(networkStream, gameResponse.Status, gameResponse.Message, ProtocolMethods.Response);
                                 break;
                             case ProtocolMethods.Buy:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -157,8 +158,7 @@ namespace SocketsSimpleServer
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 responseClient = await user.RegisterAsync(new Request
                                 {
-                                    Attributes = request,
-                                    Name = client
+                                    Attributes = request
                                 });
                                 client = responseClient.Name;
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, responseClient.Status, responseClient.Message, ProtocolMethods.Response);
@@ -167,8 +167,7 @@ namespace SocketsSimpleServer
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                                 responseClient = await user.LoginAsync(new Request
                                 {
-                                    Attributes = request,
-                                    Name = client
+                                    Attributes = request
                                 });
                                 client = responseClient.Name;
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, responseClient.Status, responseClient.Message, ProtocolMethods.Response);
@@ -211,24 +210,24 @@ namespace SocketsSimpleServer
             return response.Message;
         }
 
-        public static async Task<string> DeleteUserAsync(string name, string password)
+        public static async Task<string> DeleteUserAsync(string name)
 
         {
-            string request = name + "-" + password;
             Response response =  await user.DeleteUserAsync(new Request
             {
-                Attributes = request,
+                Attributes = name,
                 Name = "Server"
             });
             return response.Message;
         }
 
-        public static async Task<string> UpdateUserAsync(string oldName, string oldPassword, string newName, string newPassword)
+        public static async Task<string> UpdateUserAsync(string oldName, string newName, string newPassword)
         {
-            string request = oldName + "-" + oldPassword + "-" + newName + "-" + newPassword;
-            Response response =  await user.UpdateUserAsync(new Request
+            string request = oldName + "-" + newName + "-" + newPassword;
+            ResponseClient response =  await user.UpdateUserAsync(new Request
             {
-                Attributes = request
+                Attributes = request,
+                Name = "Server"
             });
             return response.Message;
         }

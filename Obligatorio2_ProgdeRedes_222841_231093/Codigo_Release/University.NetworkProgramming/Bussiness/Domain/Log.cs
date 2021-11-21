@@ -6,18 +6,18 @@ namespace Bussiness.Domain
 {
     public class Log
     {
-        public string clientName { get; set; }
-        public string gameTitle { get; set; }
-        public string date { get; set; }
-        public string message { get; set; }
+        public string ClientName { get; set; }
+        public string GameTitle { get; set; }
+        public string Date { get; set; }
+        public string Message { get; set; }
 
         public Log(string log)
         {
             string[] data = log.Split("-");
-            clientName = data[0];
-            gameTitle = data[1];
-            date = data[2];
-            message = data[3];
+            ClientName = data[0];
+            GameTitle = data[1];
+            Date = data[2];
+            Message = data[3];
         }
     }
 }

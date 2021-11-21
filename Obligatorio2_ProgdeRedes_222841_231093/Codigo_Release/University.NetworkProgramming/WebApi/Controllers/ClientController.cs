@@ -23,38 +23,62 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUserAsync([FromBody] Client user)
+        public async Task<IActionResult> CreateUserAsync([FromBody] Client client)
         {
-            var userCreated = await clientLogic.CreateAsync(user);
-            return Ok(userCreated);
+            try
+            {
+                var userCreated = await clientLogic.CreateAsync(client);
+                return Ok(userCreated);
+            }
+            catch (Exception e) { return BadRequest(e.Message); }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<IActionResult>  GetAsync()
         {
-            var user = await clientLogic.GetAllAsync();
-            return Ok(user);
+            try { 
+                var user = await clientLogic.GetAllAsync();
+                return Ok(user);
+            }catch(Exception e)
+            {
+                return Ok(e.Message);
+            }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateAsync([FromBody] Client oldClient, [FromBody] Client newClient)
-        {
-            var userUpdated = await clientLogic.UpdateAsync(oldClient, newClient);
-            return Ok(userUpdated);
+        [HttpPut("{name}")]
+        public async Task<IActionResult> UpdateAsync(string name, [FromBody] Client newClient)
+        {try
+            {
+                var userUpdated = await clientLogic.UpdateAsync(name, newClient);
+                return Ok(userUpdated);
+            }
+            catch (Exception e) { return BadRequest(e.Message); } 
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync([FromBody] Client client)
+        [HttpDelete("{name}")]
+        public async Task<IActionResult> DeleteAsync(string name)
         {
-            var user = await clientLogic.DeleteAsync(client);
-            return Ok(user);
+            try
+            {
+                var user = await clientLogic.DeleteAsync(name);
+                return Ok(user);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> BuyGameAsync([FromBody] UserBuyGame gameBuy)
+        [HttpPut("{name}/BuyGame")]
+        public async Task<IActionResult> BuyGameAsync(string name,[FromQuery] string title)
         {
-            var message = await clientLogic.BuyAsync(gameBuy);
-            return Ok(message);
+            try
+            {
+                var message = await clientLogic.BuyGameAsync(name, title);
+                return Ok(message);
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

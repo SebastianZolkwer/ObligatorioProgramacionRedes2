@@ -2,6 +2,7 @@
 using Bussiness.Domain;
 using Grpc.Net.Client;
 using Model;
+using Protocol;
 using ServerAdmin;
 using System;
 using System.Collections.Generic;
@@ -15,49 +16,57 @@ namespace BusinessLogic.Logic
     {
         private static GrpcChannel channel = GrpcChannel.ForAddress("https://localhost:5001");
         private static Greeter.GreeterClient user = new Greeter.GreeterClient(channel);
-        public string Buy(string gameTitle)
+
+        public async Task<string> BuyGameAsync(string name, string title)
         {
-            throw new NotImplementedException();
+            Response response = await user.AsociateGameAsync(new RequestClient
+            {
+                Attributes = title,
+                Client = name,
+                Name = "Admin"
+            });
+            if (response.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(response.Message);
+            }
+            return response.Message;
         }
 
-        public Task<string> BuyAsync(UserBuyGame gameBuy)
-        {
-            
-        }
 
         public async Task<Client> CreateAsync(Client client)
         {
-            try
-            {
-                client.Validate();
-            }
-            catch (InvalidOperationException e)
-            {
-                throw new Exception(e.Message);
-            }
-            string request =  client.name + "-" + client.password;
+            client.Validate();
+            string request =  client.Name + "-" + client.Password;
             ResponseClient responseClient = await user.RegisterAsync(new Request
             {
-                Attributes = request
+                Attributes = request,
+                Name = "Admin"
             });
+            if (responseClient.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(responseClient.Message);
+            }
+            Client newClient = new Client
+            {
+                Name = responseClient.Name,
+                Password = responseClient.Password
+            };
+            return newClient;
         }
 
-        public async Task<string> DeleteAsync(Client client)
+        public async Task<string> DeleteAsync(string name)
         {
-            try
-            {
-                client.Validate();
-            }
-            catch (InvalidOperationException e)
-            {
-                throw new Exception(e.Message);
-            }
-
-            string request = client.name + "-" + client.password;
             Response response = await user.DeleteUserAsync(new Request
             {
-                Attributes = request
+                Name = "Admin",
+                Attributes = name
             });
+            if (response.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(response.Message);
+            }
+            return response.Message;
+
         }
 
 
@@ -65,26 +74,51 @@ namespace BusinessLogic.Logic
         {
             Response response = await user.ShowAllUsersAsync(new Request
             {
-                Attributes = ""
+                Attributes = "",
+                Name = "Admin"
             });
+            if(response.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(response.Message);
+            }
+            string[] clients = response.Message.Split('\n');
+            List<Client> clientsDataBase = new List<Client>();
+            foreach(string client in clients)
+            {
+                if (!String.IsNullOrEmpty(client))
+                {
+                    Client newClient = new Client
+                    {
+                        Name = client.Split("Nombre:")[1].Trim()
+                    };
+                    clientsDataBase.Add(newClient);
+                }
+                
+            }
+            return clientsDataBase;
         }
 
-        public async Task<Client> UpdateAsync(Client oldClient, Client client)
+        public async Task<Client> UpdateAsync(string name, Client newClient)
         {
-            try
+            
+            newClient.Validate();
+            string request = name + "-"  + "-" + newClient.Name + "-" + newClient.Password;
+            ResponseClient response = await user.UpdateUserAsync(new Request
             {
-                client.Validate();
-                oldClient.Validate();
-            }
-            catch (InvalidOperationException e)
-            {
-                throw new Exception(e.Message);
-            }
-            string request = oldClient.name + "-" + oldClient.password + "-" + client.name + "-" + client.password;
-            Response response = await user.UpdateUserAsync(new Request
-            {
-                Attributes = request
+                Attributes = request,
+                Name = "Admin"
             });
+            if(response.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(response.Message);
+            }
+            Client client = new Client
+            {
+                Name = response.Name,
+                Password = response.Password
+            };
+            return client;
+
         }
     }
 }

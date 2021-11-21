@@ -18,18 +18,21 @@ namespace ServerAdmin
             _logger = logger;
         }
 
-        public override Task<Response> CreateGame(Request request, ServerCallContext context)
+        public override Task<GameResponse> CreateGame(Request request, ServerCallContext context)
         {
-            Response response = new Response();
+            GameResponse response = new GameResponse();
             string[] data = request.Attributes.Split("-");
             string log = request.Name + "-" + data[0] + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.Add(request.Attributes);
+                response.Title = data[0];
+                response.Gender = data[1];
+                response.Sinopsis = data[2];
                 response.Status = ProtocolMethods.Success;
                 log += "Creo juego";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 response.Message = e.Message;
                 response.Status = ProtocolMethods.Error;
@@ -39,14 +42,17 @@ namespace ServerAdmin
             return Task.FromResult(response);
         }
 
-        public override Task<Response> UpdateGame(Request request, ServerCallContext context)
+        public override Task<GameResponse> UpdateGame(Request request, ServerCallContext context)
         {
-            Response response = new Response();
+            GameResponse response = new GameResponse();
             string[] data = request.Attributes.Split("-");
             string log = request.Name + "-" + data[0] + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.Update(request.Attributes);
+                response.Title = data[0];
+                response.Gender = data[1];
+                response.Sinopsis = data[2];
                 response.Status = ProtocolMethods.Success;
                 log += "Actualizo juego";
             }
@@ -63,13 +69,13 @@ namespace ServerAdmin
         public override Task<Response> BuyGame(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Today.ToString() + "-"; 
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.Buy(request.Attributes, request.Name);
                 response.Status = ProtocolMethods.Success;
                 log += "Compro juego";
-               
+
             }
             catch (Exception e)
             {
@@ -157,7 +163,7 @@ namespace ServerAdmin
             {
                 response.Message = e.Message;
                 response.Status = ProtocolMethods.Error;
-                log += "Error: " + e.Message;
+                log += e.Message;
             }
             LogConnection.PublishMessage(log);
             return Task.FromResult(response);
@@ -203,24 +209,6 @@ namespace ServerAdmin
             return Task.FromResult(response);
         }
 
-        public override Task<Response> ReceiveImage(Request request, ServerCallContext context)
-        {
-            return Task.FromResult(new Response
-            {
-                Message = Logic.Add(request.Attributes)
-            });
-            ;
-        }
-
-        public override Task<Response> SendImage(Request request, ServerCallContext context)
-        {
-            return Task.FromResult(new Response
-            {
-                Message = Logic.Add(request.Attributes)
-            });
-            ;
-        }
-
         public override Task<Response> BoughtGames(Request request, ServerCallContext context)
         {
             Response response = new Response();
@@ -245,13 +233,13 @@ namespace ServerAdmin
         {
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Today.ToString() + "-";
+            string log = " - " + "-" + DateTime.Today.ToString() + "-";
             try
             {
-                response.Name = Logic.Login(request.Attributes).name;
+                response.Name = Logic.Login(request.Attributes).Name;
                 response.Status = ProtocolMethods.Success;
                 response.Message = "Bienvenido al sistema nuevamente";
-                log += "Se logueo en el sistema";
+                log += "Se logueo en el sistema el usuario" + data[0] ;
             }
             catch (Exception e)
             {
@@ -267,13 +255,24 @@ namespace ServerAdmin
         {
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Today.ToString() + "-";
+            string log = "";
+            if (String.IsNullOrEmpty(request.Name))
+            {
+                log += " ";
+            }
+            else
+            {
+                log += request.Name;
+            }
+
+            log += "-" + " " + "-" + DateTime.Today.ToString() + "-";
             try
             {
-                response.Name = Logic.Register(request.Attributes).name;
+                response.Name = Logic.Register(request.Attributes).Name;
+                response.Password = data[1];
                 response.Status = ProtocolMethods.Success;
                 response.Message = "Se creo un nuevo usuario";
-                log += "Se registro en el sistema";
+                log += "Se registro en el sistema usuario" + data[0];
             }
             catch (Exception e)
             {
@@ -288,7 +287,7 @@ namespace ServerAdmin
         public override Task<Response> LogOut(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Today.ToString() + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.LogOut(request.Attributes);
@@ -308,7 +307,7 @@ namespace ServerAdmin
         public override Task<Response> ShowAllUsers(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + "All" + "-" + DateTime.Today.ToString() + "-";
+            string log = request.Name + "-" + "" + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.ShowAllUsers();
@@ -319,7 +318,7 @@ namespace ServerAdmin
             {
                 response.Message = e.Message;
                 response.Status = ProtocolMethods.Error;
-                log += "Error: " + e.Message;
+                log += e.Message;
             }
             LogConnection.PublishMessage(log);
             return Task.FromResult(response);
@@ -328,13 +327,12 @@ namespace ServerAdmin
         public override Task<Response> DeleteUser(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Today.ToString() + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.DeleteUser(request.Attributes);
                 response.Status = ProtocolMethods.Success;
-                log += "Elimino un usuario";
+                log += "Elimino el usuario" + request.Attributes;
             }
             catch (Exception e)
             {
@@ -345,15 +343,18 @@ namespace ServerAdmin
             LogConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
-        public override Task<Response> UpdateUser(Request request, ServerCallContext context)
+        public override Task<ResponseClient> UpdateUser(Request request, ServerCallContext context)
         {
-            Response response = new Response();
-            string log = request.Name + "-" + "All" + "-" + DateTime.Today.ToString() + "-";
+            ResponseClient response = new ResponseClient();
+            string[] data = request.Attributes.Split("-");
+            string log = request.Name + "-" + " " + "-" + DateTime.Today.ToString() + "-";
             try
             {
                 response.Message = Logic.UpdateUser(request.Attributes);
+                response.Name = data[1];
+                response.Password = data[2];
                 response.Status = ProtocolMethods.Success;
-                log += "Actualizo un usuario";
+                log += "Actualizo el usuario" + data[0] + "y se llama" + data[1];
             }
             catch (Exception e)
             {
@@ -381,5 +382,26 @@ namespace ServerAdmin
             return Task.FromResult(response);
         }
 
+        public override Task<Response> AsociateGame(RequestClient request, ServerCallContext context)
+        {
+            Response response = new Response();
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Today.ToString() + "-";
+            try
+            {
+                response.Message = Logic.Buy(request.Attributes, request.Client);
+                response.Status = ProtocolMethods.Success;
+                log += request.Client +  "Compro juego";
+
+            }
+            catch (Exception e)
+            {
+                response.Message = e.Message;
+                response.Status = ProtocolMethods.Error;
+                log += "Error: " + e.Message;
+            }
+            LogConnection.PublishMessage(log);
+            return Task.FromResult(response);
+
+        }
     }
 }

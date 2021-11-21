@@ -102,13 +102,11 @@ namespace Server
             string newPassword;
             Console.WriteLine("Ingrese Nombre de usuario anterior");
             oldName = Console.ReadLine();
-            Console.WriteLine("Ingrese Password anterior");
-            oldPassword = Console.ReadLine();
             Console.WriteLine("Ingrese Nombre de usuario nuevo");
             newName = Console.ReadLine();
             Console.WriteLine("Ingrese Password nueva");
             newPassword = Console.ReadLine();
-            Console.WriteLine( await LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword));
+            Console.WriteLine( await LogicServer.UpdateUserAsync(oldName, newName, newPassword));
 
         }
 
@@ -118,9 +116,7 @@ namespace Server
             string password;
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
-            Console.WriteLine("Ingrese Password");
-            password = Console.ReadLine();
-            Console.WriteLine(await LogicServer.DeleteUserAsync(name, password));
+            Console.WriteLine(await LogicServer.DeleteUserAsync(name));
         }
 
         private async Task ShowAllGamesAsync()
