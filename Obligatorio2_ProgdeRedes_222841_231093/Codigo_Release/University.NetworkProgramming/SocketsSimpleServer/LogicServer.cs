@@ -26,8 +26,7 @@ namespace SocketsSimpleServer
 
                 while (request != "Exit")
                 {
-                    try
-                    {
+                    
                         var header = new Header();
                         header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                         Response response;
@@ -140,10 +139,14 @@ namespace SocketsSimpleServer
                                 break;
                             case ProtocolMethods.ReceiveImage:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
-                                var route = Logic.GetRouteImage(request);
+                                response = await user.GetRouteImageAsync(new Request
+                                {
+                                Attributes = request,
+                                Name = client
+                                });
                                 FileHandler fileHandler = new FileHandler();
                                 FileStreamHandler _fileStreamHandler = new FileStreamHandler();
-                                await Protocol.Protocol.SendFileAsync(networkStream, route, fileHandler, ProtocolMethods.Success, request, _fileStreamHandler);
+                                await Protocol.Protocol.SendFileAsync(networkStream, response.Message, fileHandler, ProtocolMethods.Success, request, _fileStreamHandler);
                                 break;
                             case ProtocolMethods.ListBoughtGames:
                                 request = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
@@ -181,11 +184,6 @@ namespace SocketsSimpleServer
                                 await Protocol.Protocol.SendAndCodeAsync(networkStream, response.Status, response.Message, ProtocolMethods.Response);
                                 break;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        await Protocol.Protocol.SendAndCodeAsync(networkStream, 0, e.Message, ProtocolMethods.Response);
-                    }
                 }
             }
         }
@@ -235,7 +233,7 @@ namespace SocketsSimpleServer
         public static async Task<string>  CreateNewUserAsync(string name, string password)
         { 
             string request = name + "-" + password;
-            ResponseClient responseClient =  await user.RegisterAsync(new Request
+            ResponseClient responseClient =  await user.RegisterAdminOrServerAsync(new Request
             {
                 Attributes = request,
                 Name = "Server"

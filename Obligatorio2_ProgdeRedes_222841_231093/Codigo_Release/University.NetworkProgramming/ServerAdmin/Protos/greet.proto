@@ -24,6 +24,9 @@ service Greeter {
   rpc UpdateUser (Request) returns (ResponseClient);
   rpc UpdateRoute(Request) returns (Response);
   rpc AsociateGame(RequestClient) returns (Response);
+  rpc RegisterAdminOrServer (Request) returns (ResponseClient);
+  rpc GetRouteImage (Request) returns (Response);
+  rpc DissociateGame (RequestClient) returns (Response);
 
 }
 
@@ -42,7 +45,6 @@ message ResponseClient {
   string name = 1;
   string message = 2;
   int32 status = 3;
-  string password = 4;
 }
 
 message GameResponse {

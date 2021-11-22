@@ -19,6 +19,7 @@ namespace BusinessLogic.Logic
 
         public async Task<string> BuyGameAsync(string name, string title)
         {
+            ValidateTitle(title);
             Response response = await user.AsociateGameAsync(new RequestClient
             {
                 Attributes = title,
@@ -32,12 +33,19 @@ namespace BusinessLogic.Logic
             return response.Message;
         }
 
+        private void ValidateTitle(string title)
+        {
+            if (String.IsNullOrEmpty(title))
+            {
+                throw new InvalidOperationException("El titulo no puede ser nulo ni vacio");
+            }
+        }
 
         public async Task<Client> CreateAsync(Client client)
         {
             client.Validate();
             string request =  client.Name + "-" + client.Password;
-            ResponseClient responseClient = await user.RegisterAsync(new Request
+            ResponseClient responseClient = await user.RegisterAdminOrServerAsync(new Request
             {
                 Attributes = request,
                 Name = "Admin"
@@ -48,8 +56,7 @@ namespace BusinessLogic.Logic
             }
             Client newClient = new Client
             {
-                Name = responseClient.Name,
-                Password = responseClient.Password
+                Name = responseClient.Name
             };
             return newClient;
         }
@@ -102,7 +109,7 @@ namespace BusinessLogic.Logic
         {
             
             newClient.Validate();
-            string request = name + "-"  + "-" + newClient.Name + "-" + newClient.Password;
+            string request = name + "-"  + newClient.Name + "-" + newClient.Password;
             ResponseClient response = await user.UpdateUserAsync(new Request
             {
                 Attributes = request,
@@ -114,11 +121,26 @@ namespace BusinessLogic.Logic
             }
             Client client = new Client
             {
-                Name = response.Name,
-                Password = response.Password
+                Name = response.Name
             };
             return client;
 
+        }
+
+        public async Task<string> ReturnGameAsync(string name, string title)
+        {
+            ValidateTitle(title);
+            Response response = await user.DissociateGameAsync(new RequestClient
+            {
+                Attributes = title,
+                Client = name,
+                Name = "Admin"
+            });
+            if (response.Status == ProtocolMethods.Error)
+            {
+                throw new Exception(response.Message);
+            }
+            return response.Message;
         }
     }
 }

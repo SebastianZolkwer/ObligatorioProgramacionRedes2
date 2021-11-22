@@ -70,7 +70,6 @@ namespace WebApi.Controllers
             try
             {
                 var gameUpdated = await gameLogic.UpdateAsync(title, game);
-                var gameToShow = new GameDto(game);
                 return Ok(gameUpdated);
             }catch(Exception e)
             {

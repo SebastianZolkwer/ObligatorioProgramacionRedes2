@@ -368,18 +368,22 @@ namespace Bussiness
             }
             if (game == null)
             {
-                throw new Exception("No fue encontrado el juego\n");
+                throw new InvalidOperationException("No fue encontrado el juego\n");
             }
             string response = "";
-            response += "Titulo:" + game.Title + " " + "Genero:" + game.Gender + " " + "Sinopsis:" + game.Sinopsis + " Promedio de calificacion:" + game.AverageQualification;
+            response += "Titulo:" + game.Title + "-" + "Genero:" + game.Gender + "-" + "Sinopsis:" + game.Sinopsis + "-Promedio de calificacion:" + game.AverageQualification;
             string reviews = GetReviews(game.Title);
             if (reviews == "")
             {
-                response += " No hay reviews para este juego";
+                response += "-No hay reviews para este juego";
             }
             else
             {
                 response += " Reviews:" + reviews;
+            }
+            if(game.ImageRoute is null)
+            {
+                throw new InvalidDataException(response);
             }
             return response + "\n";
         }
@@ -427,6 +431,25 @@ namespace Bussiness
 
         }
 
+        public static string DeleteFromBought(string data, string name)
+        {
+            Game game;
+            lock (clientsLock)
+            {
+                Client client = GetClient(name);
+                lock (gamesLock)
+                {
+                     game = client.BoughtGames.FirstOrDefault(game => game.Title == data.Trim());
+                }
+                if (game == null)
+                {
+                    throw new Exception("No fue encontrado el juego\n");
+                }
+                client.BoughtGames.Remove(game);
+                return "Se elimino el juego\n";
+            }
+        }
+
         private static int GetNumber(string number)
         {
             try
@@ -439,5 +462,26 @@ namespace Bussiness
                 throw new Exception("La calificacion debe ser un numero\n");
             }
         }
+
+        public static Client RegisterWithoutActivate(string request)
+        {
+            string[] data = request.Split("-");
+            string name = data[0];
+            string password = data[1];
+            lock (clientsLock)
+            {
+                if (clients.Any(c => c.Name == name))
+                {
+                    throw new Exception("Ya existe un usuario con ese nombre.\n");
+                }
+                Client client = new Client(name, password);
+                clients.Add(client);
+                return client;
+            }
+        }
+
+        
+
+
     }
 }

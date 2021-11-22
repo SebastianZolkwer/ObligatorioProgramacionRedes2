@@ -6,10 +6,10 @@ namespace Bussiness.Domain
 {
     public class Client
     {
-        public List<Game> BoughtGames;
-        public string Name;
-        public string Password;
-        public bool Active;
+        public List<Game> BoughtGames { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public bool Active { get; set; }
 
         public Client()
         {
@@ -26,11 +26,11 @@ namespace Bussiness.Domain
         {
             if (String.IsNullOrEmpty(this.Name))
             {
-                throw new InvalidOperationException("El nombre no puede ser nulo or vacio");
+                throw new InvalidOperationException("El nombre no puede ser nulo o vacio");
             }
             if (String.IsNullOrEmpty(this.Password))
             {
-                throw new InvalidOperationException("La contraseña no puede ser nula or vacia");
+                throw new InvalidOperationException("La contraseña no puede ser nula o vacia");
             }
         }
     }

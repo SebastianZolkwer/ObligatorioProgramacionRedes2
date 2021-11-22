@@ -70,15 +70,15 @@ namespace BusinessLogic.Logic
             string[] gameAttributes = response.Message.Split(":");
             Game game = new Game
             {
-                Title = gameAttributes[1].Split(" ")[0],
-                Gender = gameAttributes[2].Split(" ")[0],
-                Sinopsis = gameAttributes[3].Split(" ")[0],
-                AverageQualification = Int32.Parse(gameAttributes[4]),
+                Title = gameAttributes[1].Split("-")[0],
+                Gender = gameAttributes[2].Split("-")[0],
+                Sinopsis = gameAttributes[3].Split("-")[0],
+                AverageQualification = int.Parse(gameAttributes[4].Split("-")[0])
             };
             return game;
         }
 
-        public async Task<Game> UpdateAsync(string title,Game game)
+        public async Task<string> UpdateAsync(string title,Game game)
         {
             string request = title + "-" + game.Title + "-" + game.Gender + "-" + game.Sinopsis;
             GameResponse response = await user.UpdateGameAsync(new Request
@@ -90,13 +90,7 @@ namespace BusinessLogic.Logic
             {
                 throw new Exception(response.Message);
             }
-            Game newGame = new Game
-            {
-                Title = response.Title,
-                Gender = response.Gender,
-                Sinopsis = response.Sinopsis
-            };
-            return newGame;
+            return response.Message;
         }
 
         public async Task<List<Game>> GetAllAsync()

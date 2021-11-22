@@ -28,7 +28,8 @@ namespace WebApi.Controllers
             try
             {
                 var userCreated = await clientLogic.CreateAsync(client);
-                return Ok(userCreated);
+                var userToShow = new ClientDto(userCreated);
+                return Ok(userToShow);
             }
             catch (Exception e) { return BadRequest(e.Message); }
         }
@@ -37,8 +38,9 @@ namespace WebApi.Controllers
         public async Task<IActionResult>  GetAsync()
         {
             try { 
-                var user = await clientLogic.GetAllAsync();
-                return Ok(user);
+                var users = await clientLogic.GetAllAsync();
+                var usersReturn = users.Select(user => new ClientDto(user)).ToList();
+                return Ok(usersReturn);
             }catch(Exception e)
             {
                 return Ok(e.Message);
@@ -76,6 +78,20 @@ namespace WebApi.Controllers
                 var message = await clientLogic.BuyGameAsync(name, title);
                 return Ok(message);
             }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{name}/ReturnGame")]
+        public async Task<IActionResult> ReturnGameAsync(string name, [FromQuery] string title)
+        {
+            try
+            {
+                var message = await clientLogic.ReturnGameAsync(name, title);
+                return Ok(message);
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

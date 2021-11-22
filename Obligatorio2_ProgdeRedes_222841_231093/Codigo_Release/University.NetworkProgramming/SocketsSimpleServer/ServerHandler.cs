@@ -23,12 +23,12 @@ namespace Server
             TcpListener _tcpListener = new TcpListener(serverIpEndPoint);
             _tcpListener.Start(GetBackLog());
             Console.WriteLine("Start listening for client");
-            if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasServer"))
+            if (Directory.Exists("..../" + @"\CaratulasServer"))
             {
                 Directory.Delete("CaratulasServer", true);
 
             }
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
+            Directory.CreateDirectory("..../" + @"\CaratulasServer");
             _ = Task.Run(() => AcceptClients(_tcpListener));
 
             await Task.Run(() => RunFuncionalitiesMenuAsync());
@@ -97,7 +97,6 @@ namespace Server
         private async Task UpdateUserAsync()
         {
             string oldName;
-            string oldPassword;
             string newName;
             string newPassword;
             Console.WriteLine("Ingrese Nombre de usuario anterior");

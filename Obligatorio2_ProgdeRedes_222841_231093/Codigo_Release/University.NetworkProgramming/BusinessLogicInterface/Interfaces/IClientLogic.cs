@@ -14,5 +14,6 @@ namespace BusinessLogicInterface.Interfaces
         Task<string> DeleteAsync(string name);
         Task<string>  BuyGameAsync(string name, string title);
         Task<List<Client>> GetAllAsync();
+        Task<string> ReturnGameAsync(string name, string title);
     }
 }

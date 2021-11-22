@@ -10,7 +10,7 @@ namespace BusinessLogicInterface.Interfaces
     {
         Task<Game> CreateAsync(Game game);
         Task<Game> GetAsync(string title);
-        Task<Game> UpdateAsync(string title,Game game);
+        Task<string> UpdateAsync(string title,Game game);
         Task<string> DeleteAsync(string title);
         Task<List<Game>> GetAllAsync();
     }

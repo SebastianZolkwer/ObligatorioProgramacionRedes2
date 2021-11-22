@@ -21,15 +21,15 @@ namespace Bussiness.Domain
         {
             if (String.IsNullOrEmpty(this.Title))
             {
-                throw new InvalidOperationException("El titulo no puede ser nulo or vacio");
+                throw new InvalidOperationException("El titulo no puede ser nulo o vacio");
             }
             if (String.IsNullOrEmpty(this.Gender))
             {
-                throw new InvalidOperationException("El genero no puede ser nulo or vacio");
+                throw new InvalidOperationException("El genero no puede ser nulo o vacio");
             }
             if (String.IsNullOrEmpty(this.Sinopsis))
             {
-                throw new InvalidOperationException("La sinopsis ser nula or vacia");
+                throw new InvalidOperationException("La sinopsis ser nula o vacia");
             }
         }
     }
