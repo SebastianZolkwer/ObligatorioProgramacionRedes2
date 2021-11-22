@@ -23,12 +23,12 @@ namespace Server
             TcpListener _tcpListener = new TcpListener(serverIpEndPoint);
             _tcpListener.Start(GetBackLog());
             Console.WriteLine("Start listening for client");
-            if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasServer"))
+            if (Directory.Exists(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer"))
             {
-                Directory.Delete("CaratulasServer", true);
+                Directory.Delete(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer", true);
 
             }
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
+            Directory.CreateDirectory(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer");
             _ = Task.Run(() => AcceptClients(_tcpListener));
 
             await Task.Run(() => RunFuncionalitiesMenuAsync());
