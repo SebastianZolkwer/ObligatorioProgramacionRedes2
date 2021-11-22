@@ -9,7 +9,7 @@ namespace BusinessLogicInterface.Interfaces
     public interface IClientLogic
     {
         Task<Client> CreateAsync(Client client);
-        Task<Client> UpdateAsync(string name, Client newClient);
+        Task<String> UpdateAsync(string name, Client newClient);
         Task<string> DeleteAsync(string name);
         Task<string> BuyGameAsync(string name, string title);
         Task<List<Client>> GetAllAsync();

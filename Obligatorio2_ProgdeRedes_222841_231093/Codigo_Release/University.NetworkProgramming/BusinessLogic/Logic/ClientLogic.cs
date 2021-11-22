@@ -103,7 +103,7 @@ namespace BusinessLogic.Logic
             return clientsDataBase;
         }
 
-        public async Task<Client> UpdateAsync(string name, Client newClient)
+        public async Task<String> UpdateAsync(string name, Client newClient)
         {
 
             newClient.Validate();
@@ -117,11 +117,7 @@ namespace BusinessLogic.Logic
             {
                 throw new Exception(response.Message);
             }
-            Client client = new Client
-            {
-                Name = response.Name
-            };
-            return client;
+            return response.Message;
 
         }
 
