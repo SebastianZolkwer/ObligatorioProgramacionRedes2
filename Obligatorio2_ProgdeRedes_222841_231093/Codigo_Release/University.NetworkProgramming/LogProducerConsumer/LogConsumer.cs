@@ -44,7 +44,6 @@ namespace LogProducerConsumer
                 string message = Encoding.UTF8.GetString(body);
                 Log log = new Log(message);
                 LogRepository.Add(log);
-                Console.WriteLine("Received message : " + message);
             };
 
             channel.BasicConsume(

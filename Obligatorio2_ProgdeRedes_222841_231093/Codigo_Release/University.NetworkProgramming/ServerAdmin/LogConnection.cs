@@ -18,9 +18,7 @@ namespace ServerAdmin
                 using IModel channel = connection.CreateModel();
                 DeclareQueue(channel);
             }
-
         }
-
 
         public static void DeclareQueue(IModel channel)
         {
@@ -31,17 +29,6 @@ namespace ServerAdmin
                 autoDelete: false,
                 arguments: null);
         }
-
-       /* public static void SendMessages(string message)
-        {
-            
-            while (!message.Equals(ExitMessage, StringComparison.InvariantCultureIgnoreCase))
-            {
-                message = Console.ReadLine();
-                if (!string.IsNullOrEmpty(message) || !message.Equals(ExitMessage, StringComparison.InvariantCultureIgnoreCase))
-                   // PublishMessage(channel, message);
-            }
-        }*/
 
         public static void PublishMessage( string message)
         {

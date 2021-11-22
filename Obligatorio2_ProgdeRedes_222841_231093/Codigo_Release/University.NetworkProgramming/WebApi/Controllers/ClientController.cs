@@ -2,6 +2,7 @@
 using Bussiness.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,38 +23,83 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateUser([FromBodyAttribute] Client user)
+        public async Task<IActionResult> CreateUserAsync([FromBody] Client client)
         {
-            var userCreated = clientLogic.Create(user);
-            return Ok(userCreated);
+            try
+            {
+                var userCreated = await clientLogic.CreateAsync(client);
+                var userToShow = new ClientDto(userCreated);
+                return Ok(userToShow);
+            }
+            catch (Exception e) { return BadRequest(e.Message); }
         }
 
         [HttpGet]
-        public IActionResult Get([FromBodyAttribute] string name)
+        public async Task<IActionResult> GetAsync()
         {
-            var user = clientLogic.Get(name);
-            return Ok(user);
+            try
+            {
+                var users = await clientLogic.GetAllAsync();
+                var usersReturn = users.Select(user => new ClientDto(user)).ToList();
+                return Ok(usersReturn);
+            }
+            catch (Exception e)
+            {
+                return Ok(e.Message);
+            }
         }
 
-        [HttpPost]
-        public IActionResult Update([FromBodyAttribute] Client user)
+        [HttpPut("{name}")]
+        public async Task<IActionResult> UpdateAsync(string name, [FromBody] Client newClient)
         {
-            var userUpdated = clientLogic.Update(user);
-            return Ok(userUpdated);
+            try
+            {
+                var userUpdated = await clientLogic.UpdateAsync(name, newClient);
+                return Ok(userUpdated);
+            }
+            catch (Exception e) { return BadRequest(e.Message); }
         }
 
-        [HttpDelete]
-        public IActionResult Delete([FromBodyAttribute] string name)
+        [HttpDelete("{name}")]
+        public async Task<IActionResult> DeleteAsync(string name)
         {
-            var user = clientLogic.Delete(name);
-            return Ok(user);
+            try
+            {
+                var user = await clientLogic.DeleteAsync(name);
+                return Ok(user);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
-        [HttpPost]
-        public IActionResult BuyGame([FromBodyAttribute] string gameTitle)
+        [HttpPut("{name}/BuyGame")]
+        public async Task<IActionResult> BuyGameAsync(string name, [FromQuery] string title)
         {
-            var message = clientLogic.Buy(gameTitle);
-            return Ok(message);
+            try
+            {
+                var message = await clientLogic.BuyGameAsync(name, title);
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{name}/ReturnGame")]
+        public async Task<IActionResult> ReturnGameAsync(string name, [FromQuery] string title)
+        {
+            try
+            {
+                var message = await clientLogic.ReturnGameAsync(name, title);
+                return Ok(message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
