@@ -336,7 +336,7 @@ namespace Bussiness
                 {
                     throw new Exception("No fue encontrado el juego\n");
                 }
-                game.ImageRoute = Directory.GetCurrentDirectory() + @"\CaratulasServer\" + data[0] + data[1];
+                game.ImageRoute = Directory.GetParent(Directory.GetCurrentDirectory()) + @"\CaratulasServer\" + data[0] + data[1];
             }
         }
 
