@@ -54,16 +54,16 @@ namespace Server
                 switch (message)
                 {
                     case 1:
-                         await ShowAllGamesAsync();
+                        await ShowAllGamesAsync();
                         break;
                     case 2:
-                         await CreateUserAsync();
+                        await CreateUserAsync();
                         break;
                     case 3:
                         await UpdateUserAsync();
                         break;
                     case 4:
-                         await DeleteUserAsync();
+                        await DeleteUserAsync();
                         break;
                     case 5:
                         await ShowAllUsersAsync();
@@ -73,13 +73,13 @@ namespace Server
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
-                }  
+                }
             }
         }
 
         private async Task ShowAllUsersAsync()
         {
-            Console.WriteLine( await LogicServer.ShowAllUsersAsync());
+            Console.WriteLine(await LogicServer.ShowAllUsersAsync());
         }
 
         private async Task CreateUserAsync()
@@ -97,30 +97,24 @@ namespace Server
         private async Task UpdateUserAsync()
         {
             string oldName;
-            string oldPassword;
             string newName;
             string newPassword;
             Console.WriteLine("Ingrese Nombre de usuario anterior");
             oldName = Console.ReadLine();
-            Console.WriteLine("Ingrese Password anterior");
-            oldPassword = Console.ReadLine();
             Console.WriteLine("Ingrese Nombre de usuario nuevo");
             newName = Console.ReadLine();
             Console.WriteLine("Ingrese Password nueva");
             newPassword = Console.ReadLine();
-            Console.WriteLine( await LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword));
+            Console.WriteLine(await LogicServer.UpdateUserAsync(oldName, newName, newPassword));
 
         }
 
         private async Task DeleteUserAsync()
         {
             string name;
-            string password;
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
-            Console.WriteLine("Ingrese Password");
-            password = Console.ReadLine();
-            Console.WriteLine(await LogicServer.DeleteUserAsync(name, password));
+            Console.WriteLine(await LogicServer.DeleteUserAsync(name));
         }
 
         private async Task ShowAllGamesAsync()
@@ -166,7 +160,7 @@ namespace Server
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
                 NetworkStream _networkStream = tcpClient.GetStream();
-                 Task.Run( async() =>  await LogicServer.ClientHandlerAsync(_networkStream));
+                Task.Run(async () => await LogicServer.ClientHandlerAsync(_networkStream));
             }
         }
         private static int GetNumber(string number)
@@ -183,4 +177,3 @@ namespace Server
         }
     }
 }
-     

@@ -2,15 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BusinessLogicInterface.Interfaces
 {
     public interface IClientLogic
     {
-        Client Create(Client client);
-        Client Get(string name);
-        Client Update(Client client);
-        Client Delete(string name);
-        string Buy(string gameTitle);
+        Task<Client> CreateAsync(Client client);
+        Task<Client> UpdateAsync(string name, Client newClient);
+        Task<string> DeleteAsync(string name);
+        Task<string> BuyGameAsync(string name, string title);
+        Task<List<Client>> GetAllAsync();
+        Task<string> ReturnGameAsync(string name, string title);
     }
 }
