@@ -1,5 +1,6 @@
 ﻿using BusinessLogicInterface.Interfaces;
 using Bussiness.Domain;
+using DataAccess;
 using DataAccessInterface;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,13 @@ namespace BusinessLogic.Logic
 {
     public class LogLogic : ILogLogic
     {
-        public ILogRepository _logRepository;
-        public LogLogic(ILogRepository logRepository){
-            this._logRepository = logRepository;
+
+        public LogLogic(){
         }
 
         public List<Log> GetAll(string userName, string gameTitle, string date)
         {
-            List<Log> _logs = _logRepository.GetAll();
+            List<Log> _logs = LogRepository.GetAll();
             if (!String.IsNullOrEmpty(userName))
             {
                 _logs = _logs.Where(log => log.clientName.Contains(userName)).ToList();

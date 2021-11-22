@@ -15,20 +15,21 @@ namespace WebApiLogs
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
             var factory = new ConnectionFactory { HostName = "localhost" };
             using IConnection connection = factory.CreateConnection();
             using IModel channel = connection.CreateModel();
 
             LogConsumer.DeclareQueue(channel);
             LogConsumer.ReceiveMessages(channel);
+            CreateHostBuilder(args).Build().Run();
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().UseUrls("https://*:54930");
                 });
     }
 }

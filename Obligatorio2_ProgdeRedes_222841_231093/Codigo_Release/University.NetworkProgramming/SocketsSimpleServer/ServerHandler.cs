@@ -15,7 +15,7 @@ namespace Server
     public class ServerHandler
     {
         private bool runServer = true;
-        public ServerHandler()
+        public async Task StartServer()
         {
             IPEndPoint serverIpEndPoint = new IPEndPoint(
                IPAddress.Parse(GetIPAddress()),
@@ -23,20 +23,20 @@ namespace Server
             TcpListener _tcpListener = new TcpListener(serverIpEndPoint);
             _tcpListener.Start(GetBackLog());
             Console.WriteLine("Start listening for client");
-            if (Directory.Exists(Directory.GetCurrentDirectory() + @"\CaratulasServer"))
+            if (Directory.Exists(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer"))
             {
-                Directory.Delete("CaratulasServer", true);
+                Directory.Delete(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer", true);
 
             }
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\CaratulasServer");
-            Task.Run(() => AcceptClients(_tcpListener));            
-            
-            RunFuncionalitiesMenu();
-            
+            Directory.CreateDirectory(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + @"\CaratulasServer");
+            _ = Task.Run(() => AcceptClients(_tcpListener));
+
+            await Task.Run(() => RunFuncionalitiesMenuAsync());
+
             runServer = false;
         }
 
-        private void  RunFuncionalitiesMenu()
+        private async Task RunFuncionalitiesMenuAsync()
         {
             int message = -1;
             while (message != 6)
@@ -54,35 +54,35 @@ namespace Server
                 switch (message)
                 {
                     case 1:
-                         ShowAllGames();
+                        await ShowAllGamesAsync();
                         break;
                     case 2:
-                         CreateUser();
+                        await CreateUserAsync();
                         break;
                     case 3:
-                        UpdateUser();
+                        await UpdateUserAsync();
                         break;
                     case 4:
-                         DeleteUser();
+                        await DeleteUserAsync();
                         break;
                     case 5:
-                        ShowAllUsers();
+                        await ShowAllUsersAsync();
                         break;
                     case 6:
                         break;
                     default:
                         Console.WriteLine("Opcion invalida");
                         break;
-                }  
+                }
             }
         }
 
-        private void ShowAllUsers()
+        private async Task ShowAllUsersAsync()
         {
-            Console.WriteLine( LogicServer.ShowAllUsers());
+            Console.WriteLine(await LogicServer.ShowAllUsersAsync());
         }
 
-        private void  CreateUser()
+        private async Task CreateUserAsync()
         {
             string name;
             string password;
@@ -91,48 +91,35 @@ namespace Server
             name = Console.ReadLine();
             Console.WriteLine("Ingrese Password");
             password = Console.ReadLine();
-            Console.WriteLine(LogicServer.CreateNewUser(name, password));
+            Console.WriteLine(await LogicServer.CreateNewUserAsync(name, password));
         }
 
-        private void UpdateUser()
+        private async Task UpdateUserAsync()
         {
             string oldName;
-            string oldPassword;
             string newName;
             string newPassword;
             Console.WriteLine("Ingrese Nombre de usuario anterior");
             oldName = Console.ReadLine();
-            Console.WriteLine("Ingrese Password anterior");
-            oldPassword = Console.ReadLine();
             Console.WriteLine("Ingrese Nombre de usuario nuevo");
             newName = Console.ReadLine();
             Console.WriteLine("Ingrese Password nueva");
             newPassword = Console.ReadLine();
-            Console.WriteLine( LogicServer.UpdateUserAsync(oldName, oldPassword, newName, newPassword));
+            Console.WriteLine(await LogicServer.UpdateUserAsync(oldName, newName, newPassword));
 
         }
 
-        private void DeleteUser()
+        private async Task DeleteUserAsync()
         {
             string name;
-            string password;
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
-            Console.WriteLine("Ingrese Password");
-            password = Console.ReadLine();
-            Console.WriteLine(LogicServer.DeleteUser(name, password));
+            Console.WriteLine(await LogicServer.DeleteUserAsync(name));
         }
 
-        private void  ShowAllGames()
+        private async Task ShowAllGamesAsync()
         {
-            try
-            {
-                Console.WriteLine(Logic.GetAll());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            Console.WriteLine(await LogicServer.ShowAllGamesAsync());
         }
 
         private void WriteMenu()
@@ -190,4 +177,3 @@ namespace Server
         }
     }
 }
-     

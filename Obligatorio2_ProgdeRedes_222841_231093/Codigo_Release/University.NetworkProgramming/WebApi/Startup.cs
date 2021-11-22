@@ -28,6 +28,7 @@ namespace WebApi
         {
             services.AddControllers();
             ServiceFactory factory = new ServiceFactory(services);
+            factory.AddCustomServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

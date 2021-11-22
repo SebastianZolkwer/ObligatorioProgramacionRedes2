@@ -1,4 +1,5 @@
 ﻿using Bussiness.Domain;
+using DataAccess;
 using DataAccessInterface;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -41,9 +42,8 @@ namespace LogProducerConsumer
             {
                 byte[] body = ea.Body.ToArray();
                 string message = Encoding.UTF8.GetString(body);
-                Log log = ConvertToLog(message);
-                logRepository.Add(log);
-                Console.WriteLine("Received message : " + message);
+                Log log = new Log(message);
+                LogRepository.Add(log);
             };
 
             channel.BasicConsume(
@@ -52,19 +52,6 @@ namespace LogProducerConsumer
                 consumer: consumer);
         }
 
-        private Log ConvertToLog(string message)
-        {
-            string[] data = message.Split("-");
-            Log newLog = new Log()
-            {
-                clientName = data[0],
-                gameTitle = data[1],
-                date = data[2],
-                message = data[3]
-            };
-            return newLog;
-
-        }
     }
 }
 

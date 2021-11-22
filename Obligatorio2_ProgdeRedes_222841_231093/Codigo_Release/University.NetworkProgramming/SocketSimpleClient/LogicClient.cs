@@ -12,7 +12,7 @@ namespace SocketSimpleClient
     public static class LogicClient
     {
         public static FileHandler fileHandler = new FileHandler();
-        public static  FileStreamHandler fileStreamHandler = new FileStreamHandler();
+        public static FileStreamHandler fileStreamHandler = new FileStreamHandler();
         private static bool connected = true;
         private static bool logged = false;
         public async static Task WriteServerAsync(TcpClient tcpClient, NetworkStream networkStream)
@@ -22,11 +22,15 @@ namespace SocketSimpleClient
             {
                 await ManageClientAsync(tcpClient, networkStream, header);
                 await ActionMenuAsync(tcpClient, networkStream, header);
+
             }
             catch (IOException)
             {
                 Console.WriteLine("Se cerro la conexion del servidor");
+                connected = false;
+                logged = true;
             }
+
             networkStream.Close();
             tcpClient.Close();
         }
@@ -116,7 +120,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
         }
 
         private async static Task ManageClientAsync(TcpClient tcpClient, NetworkStream networkStream, Header header)
@@ -139,7 +143,7 @@ namespace SocketSimpleClient
                         await RegisterAsync(networkStream, header);
                         break;
                     case 2:
-                        await LoginAsync (networkStream, header);
+                        await LoginAsync(networkStream, header);
                         break;
                     case 3:
                         logged = true;
@@ -170,7 +174,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 Console.WriteLine("¡" + name + ", bienvenido nuevamente al sistema!");
@@ -185,17 +189,18 @@ namespace SocketSimpleClient
             string password;
             Console.WriteLine("Ingrese Nombre de usuario");
             name = Console.ReadLine();
+
             Console.WriteLine("Ingrese su Password");
             password = Console.ReadLine();
             try
             {
-                await Protocol .Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Register, $"{name}-{password}", ProtocolMethods.Request);
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Register, $"{name}-{password}", ProtocolMethods.Request);
                 header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                 string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 Console.WriteLine("¡" + name + ", bienvenido al sistema!");
@@ -219,7 +224,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
         }
 
         private async static Task DeleteAsync(NetworkStream networkStream, Header header)
@@ -235,7 +240,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {} 
+            { }
         }
 
         private async static Task ReviewsAsync(NetworkStream networkStream, Header header)
@@ -251,23 +256,23 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
         }
 
         private async static Task ShowAllAsync(NetworkStream networkStream, Header header)
         {
             try
             {
-                await  Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.ShowAll, "", ProtocolMethods.Request);
+                await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.ShowAll, "", ProtocolMethods.Request);
                 header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                 string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}   
+            { }
         }
 
-        private async static Task  ShowAsync(NetworkStream networkStream, Header header)
+        private async static Task ShowAsync(NetworkStream networkStream, Header header)
         {
             string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere observar detalles");
@@ -280,17 +285,17 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
-            if(header.GetMethod() == ProtocolMethods.Success)
+            { }
+            if (header.GetMethod() == ProtocolMethods.Success)
             {
-                Console.WriteLine("Desea descargar la caratula? Si/No" );
+                Console.WriteLine("Desea descargar la caratula? Si/No");
                 string answer = "";
                 try
                 {
                     answer = Console.ReadLine().ToLower();
                 }
                 catch { }
-                if(answer == "si")
+                if (answer == "si")
                 {
                     try
                     {
@@ -298,10 +303,11 @@ namespace SocketSimpleClient
                         header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                         await Protocol.Protocol.ReceiveFileAsync(networkStream, header, fileStreamHandler, false);
                         Console.WriteLine("Se ha descargado la imagen correspondiente!");
-                    } catch (SocketException)
-                    {}
+                    }
+                    catch (SocketException)
+                    { }
                 }
-            } 
+            }
         }
         private async static Task SearchAsync(NetworkStream networkStream, Header header)
         {
@@ -322,7 +328,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {} 
+            { }
         }
 
         private async static Task EvaluateAsync(NetworkStream networkStream, Header header)
@@ -342,22 +348,24 @@ namespace SocketSimpleClient
                 header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                 string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
-            }catch (SocketException)
-            {}
+            }
+            catch (SocketException)
+            { }
         }
 
-        private  async static Task BuyAsync(NetworkStream networkStream, Header header)
+        private async static Task BuyAsync(NetworkStream networkStream, Header header)
         {
             string titleGame;
             Console.WriteLine("Ingrese titulo de juego que quiere comprar");
             titleGame = Console.ReadLine();
-            try {
+            try
+            {
                 await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.Buy, $"{titleGame}", ProtocolMethods.Request);
                 header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                 string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                 Console.WriteLine(response);
             }
-            catch (SocketException) 
+            catch (SocketException)
             { }
         }
 
@@ -383,7 +391,7 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            { } 
+            { }
         }
 
         private async static Task CreateAsync(NetworkStream networkStream, Header header)
@@ -406,11 +414,11 @@ namespace SocketSimpleClient
                 Console.WriteLine(response);
             }
             catch (SocketException)
-            {}
+            { }
             if (header.GetMethod() != ProtocolMethods.Error)
             {
                 string path = string.Empty;
-                while (path == null ||  path.Equals(string.Empty) || !fileHandler.FileExists(path))
+                while (path == null || path.Equals(string.Empty) || !fileHandler.FileExists(path))
                 {
                     Console.WriteLine("Ingrese la ruta de la caratula");
                     path = Console.ReadLine();
@@ -423,10 +431,10 @@ namespace SocketSimpleClient
                     header = await Protocol.Protocol.ReceiveAndDecodeFixDataAsync(networkStream, header);
                     string response = await Protocol.Protocol.RecieveAndDecodeVariableDataAsync(networkStream, header.GetDataLength());
                     Console.WriteLine(response);
-                   await  Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.UpdateRoute, $"{title}-{type}", ProtocolMethods.Request);
+                    await Protocol.Protocol.SendAndCodeAsync(networkStream, ProtocolMethods.UpdateRoute, $"{title}-{type}", ProtocolMethods.Request);
                 }
-                catch (SocketException) 
-                {}
+                catch (SocketException)
+                { }
             }
         }
 

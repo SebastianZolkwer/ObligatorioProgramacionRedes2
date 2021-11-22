@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace DataAccess
 {
-    public class LogRepository : ILogRepository
+    public class LogRepository
     {
-        private List<Log> logs;
+        private static List<Log> logs = new List<Log>();
 
-        public void Add(Log log)
+        public static void Add(Log log)
         {
             logs.Add(log);
         }
 
-        public List<Log> GetAll()
+        public static  List<Log> GetAll()
         {
             return logs;
         }

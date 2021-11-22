@@ -2,6 +2,7 @@
 using Bussiness.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,31 +23,73 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBodyAttribute] Game game)
+        public async Task<IActionResult> CreateAsync([FromBody] Game game)
         {
-            var gameCreated = gameLogic.Create(game);
-            return Ok(gameCreated);
+            try
+            {
+                var gameCreated = await gameLogic.CreateAsync(game);
+                var gameToShoW = new GameDto(gameCreated);
+                return Ok(gameToShoW);
+            }
+            catch (Exception e) { return BadRequest(e.Message); }
         }
 
         [HttpGet]
-        public IActionResult Get([FromBodyAttribute] string title)
+        public async Task<IActionResult> GetAllAsync()
         {
-            var game = gameLogic.Get(title);
-            return Ok(game);
+            try
+            {
+                var games = await gameLogic.GetAllAsync();
+                var gamesReturn = games.Select(game => new GameToShowAll(game)).ToList();
+                return Ok(gamesReturn);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
-        [HttpPost]
-        public IActionResult Update([FromBodyAttribute] Game game)
+        [HttpGet("{title}")]
+        public async Task<IActionResult> GetAsync(string title)
         {
-            var gameUpdated = gameLogic.Update(game);
-            return Ok(gameUpdated);
+            try
+            {
+                var game = await gameLogic.GetAsync(title);
+                var gameToShow = new GameDto(game);
+                return Ok(gameToShow);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
-        [HttpDelete]
-        public IActionResult Delete([FromBodyAttribute] string title)
+        [HttpPut("{title}")]
+        public async Task<IActionResult> UpdateAsync(string title, [FromBody] Game game)
         {
-            var game = gameLogic.Delete(title);
-            return Ok(game);
+            try
+            {
+                var gameUpdated = await gameLogic.UpdateAsync(title, game);
+                return Ok(gameUpdated);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{title}")]
+        public async Task<IActionResult> Delete(string title)
+        {
+            try
+            {
+                var game = await gameLogic.DeleteAsync(title);
+                return Ok(game);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

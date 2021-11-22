@@ -1,5 +1,6 @@
 ﻿using Files;
 using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,7 +70,7 @@ namespace Protocol
                 }
                 if (servidor)
                 {
-                    await fileStreamHandler.WriteDataAsync("CaratulasServer/" + title + "." + type, buffer);
+                    await fileStreamHandler.WriteDataAsync(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent + "/CaratulasServer/" + title + "." + type, buffer);
                 }
                 else
                 {
