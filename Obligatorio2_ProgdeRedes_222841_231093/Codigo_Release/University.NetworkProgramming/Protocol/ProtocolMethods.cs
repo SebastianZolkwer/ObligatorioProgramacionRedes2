@@ -8,6 +8,7 @@ namespace Protocol
     {
         public const int Error = 0;
         public const int Success = 1;
+        public const int SuccessWithoutPhoto = 2;
         public const int Create = 1;
         public const int Update = 2;
         public const int Buy = 3;
