@@ -7,18 +7,8 @@ namespace ServerAdmin
 {
     static class LogConnection
     {
-        private const string SimpleQueueName = "n6aBasicQueue";
-        private const string ExitMessage = "exit";
-        private static IModel channel;
+        private const string SimpleQueueName = "BasicQueue";
 
-        public static void  SetChannel(IConnection connection)
-        {
-            if(channel is null)
-            {
-                using IModel channel = connection.CreateModel();
-                DeclareQueue(channel);
-            }
-        }
 
         public static void DeclareQueue(IModel channel)
         {
@@ -34,11 +24,11 @@ namespace ServerAdmin
         {
             var factory = new ConnectionFactory { HostName = "localhost" };
             using IConnection connection = factory.CreateConnection();
-            using IModel channel2 = connection.CreateModel();
-            DeclareQueue(channel2);
+            using IModel channel = connection.CreateModel();
+            DeclareQueue(channel);
             byte[] body = Encoding.UTF8.GetBytes(message);
 
-            channel2.BasicPublish(
+            channel.BasicPublish(
                 exchange: "",
                 routingKey: SimpleQueueName,
                 basicProperties: null,
