@@ -40,7 +40,7 @@ namespace WebApi.Controllers
             try
             {
                 var games = await gameLogic.GetAllAsync();
-                var gamesReturn = games.Select(game => new GameDto(game)).ToList();
+                var gamesReturn = games.Select(game => new GameToShowAll(game)).ToList();
                 return Ok(gamesReturn);
             }
             catch (Exception e)

@@ -413,6 +413,10 @@ namespace Bussiness
             lock (clientsLock)
             {
                 Client client = GetClient(name);
+                if (client is null)
+                {
+                    throw new Exception("No existe usuario con el nombre " + name + "/n");
+                }
                 lock (gamesLock)
                 {
                     game = GetGame(data);
@@ -437,6 +441,10 @@ namespace Bussiness
             lock (clientsLock)
             {
                 Client client = GetClient(name);
+                if (client is null)
+                {
+                    throw new Exception("No existe usuario con el nombre " + name);
+                }
                 lock (gamesLock)
                 {
                     game = client.BoughtGames.FirstOrDefault(game => game.Title == data.Trim());

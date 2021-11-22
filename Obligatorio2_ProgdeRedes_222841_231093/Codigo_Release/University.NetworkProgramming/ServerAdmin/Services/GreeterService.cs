@@ -23,7 +23,7 @@ namespace ServerAdmin
         {
             GameResponse response = new GameResponse();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Add(request.Attributes);
@@ -47,7 +47,7 @@ namespace ServerAdmin
         {
             GameResponse response = new GameResponse();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Update(request.Attributes);
@@ -67,7 +67,7 @@ namespace ServerAdmin
         public override Task<Response> BuyGame(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Buy(request.Attributes, request.Name);
@@ -89,7 +89,7 @@ namespace ServerAdmin
         {
             Response response = new Response();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + data[0] + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Evaluate(request.Attributes);
@@ -109,7 +109,7 @@ namespace ServerAdmin
         public override Task<Response> Show(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Show(request.Attributes);
@@ -136,7 +136,7 @@ namespace ServerAdmin
         public override Task<Response> Search(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Search(request.Attributes);
@@ -157,7 +157,7 @@ namespace ServerAdmin
         public override Task<Response> ShowAllGames(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.GetAll();
@@ -177,7 +177,7 @@ namespace ServerAdmin
         public override Task<Response> ReviewsGame(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.GetReviews(request.Attributes);
@@ -197,7 +197,7 @@ namespace ServerAdmin
         public override Task<Response> DeleteGame(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Delete(request.Attributes);
@@ -217,7 +217,7 @@ namespace ServerAdmin
         public override Task<Response> BoughtGames(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + "All" + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.GetListBought(request.Name);
@@ -238,13 +238,13 @@ namespace ServerAdmin
         {
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
-            string log = " - " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = " - " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Name = Logic.Login(request.Attributes).Name;
                 response.Status = ProtocolMethods.Success;
                 response.Message = "Bienvenido al sistema nuevamente";
-                log += "Se logueo en el sistema el usuario" + data[0];
+                log += "Se logueo en el sistema el usuario " + data[0];
             }
             catch (Exception e)
             {
@@ -260,7 +260,7 @@ namespace ServerAdmin
         {
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
-            string log = " - " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = " - " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Name = Logic.Register(request.Attributes).Name;
@@ -281,10 +281,10 @@ namespace ServerAdmin
         public override Task<Response> LogOut(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
-                response.Message = Logic.LogOut(request.Attributes);
+                response.Message = Logic.LogOut(request.Name);
                 response.Status = ProtocolMethods.Success;
                 log += "Salio del sistema";
             }
@@ -301,7 +301,7 @@ namespace ServerAdmin
         public override Task<Response> ShowAllUsers(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + "" + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + "" + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.ShowAllUsers();
@@ -321,12 +321,12 @@ namespace ServerAdmin
         public override Task<Response> DeleteUser(Request request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.DeleteUser(request.Attributes);
                 response.Status = ProtocolMethods.Success;
-                log += "Elimino el usuario" + request.Attributes;
+                log += "Elimino el usuario " + request.Attributes;
             }
             catch (Exception e)
             {
@@ -341,13 +341,13 @@ namespace ServerAdmin
         {
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
-            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.UpdateUser(request.Attributes);
                 response.Name = data[1];
                 response.Status = ProtocolMethods.Success;
-                log += "Actualizo el usuario" + data[0] + "y se llama" + data[1];
+                log += "Actualizo el usuario " + data[0] + " y se llama " + data[1];
             }
             catch (Exception e)
             {
@@ -378,7 +378,7 @@ namespace ServerAdmin
         public override Task<Response> AsociateGame(RequestClient request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.Buy(request.Attributes, request.Client);
@@ -401,7 +401,7 @@ namespace ServerAdmin
         {
 
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.GetRouteImage(request.Attributes);
@@ -423,7 +423,7 @@ namespace ServerAdmin
             ResponseClient response = new ResponseClient();
             string[] data = request.Attributes.Split("-");
 
-            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + " " + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Name = Logic.RegisterWithoutActivate(request.Attributes).Name;
@@ -444,7 +444,7 @@ namespace ServerAdmin
         public override Task<Response> DissociateGame(RequestClient request, ServerCallContext context)
         {
             Response response = new Response();
-            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/mm/yyyy") + "-";
+            string log = request.Name + "-" + request.Attributes + "-" + DateTime.Now.ToString("dd/MM/yyyy") + "-";
             try
             {
                 response.Message = Logic.DeleteFromBought(request.Attributes, request.Client);
