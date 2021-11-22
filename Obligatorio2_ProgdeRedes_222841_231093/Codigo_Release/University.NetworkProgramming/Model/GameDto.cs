@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Model
 {
-    class GameDto
+    public class GameDto
     {
         public string Title { get; set; }
         public string Gender { get; set; }

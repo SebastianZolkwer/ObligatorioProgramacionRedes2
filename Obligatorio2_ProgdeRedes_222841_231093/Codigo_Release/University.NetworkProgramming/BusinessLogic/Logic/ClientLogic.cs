@@ -2,6 +2,7 @@
 using Bussiness.Domain;
 using Grpc.Net.Client;
 using Protocol;
+using ServerAdmin;
 using System;
 using System.Collections.Generic;
 using System.Text;
