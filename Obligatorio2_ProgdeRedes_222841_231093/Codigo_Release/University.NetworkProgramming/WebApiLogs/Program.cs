@@ -15,12 +15,7 @@ namespace WebApiLogs
     {
         public static void Main(string[] args)
         {
-            var factory = new ConnectionFactory { HostName = "localhost" };
-            using IConnection connection = factory.CreateConnection();
-            using IModel channel = connection.CreateModel();
-
-            LogConsumer.DeclareQueue(channel);
-            LogConsumer.ReceiveMessages(channel);
+            LogConsumer.StartService();
             CreateHostBuilder(args).Build().Run();
             
         }

@@ -14,6 +14,7 @@ namespace ServerAdmin
     public class GreeterService : Greeter.GreeterBase
     {
         private readonly ILogger<GreeterService> _logger;
+        public static LogConnection logConnection = new LogConnection();
         public GreeterService(ILogger<GreeterService> logger)
         {
             _logger = logger;
@@ -39,7 +40,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -60,7 +61,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -81,7 +82,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -102,7 +103,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -129,7 +130,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -149,7 +150,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -170,7 +171,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -190,7 +191,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -210,7 +211,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -230,7 +231,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -252,7 +253,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -274,7 +275,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -294,7 +295,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -314,7 +315,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -334,7 +335,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
         public override Task<ResponseClient> UpdateUser(Request request, ServerCallContext context)
@@ -355,7 +356,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -392,7 +393,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
 
         }
@@ -414,7 +415,7 @@ namespace ServerAdmin
                 response.Message = e.Message;
                 response.Status = ProtocolMethods.Error; log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -437,7 +438,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
 
@@ -457,7 +458,7 @@ namespace ServerAdmin
                 response.Status = ProtocolMethods.Error;
                 log += "Error: " + e.Message;
             }
-            LogConnection.PublishMessage(log);
+            logConnection.PublishMessage(log);
             return Task.FromResult(response);
         }
     }

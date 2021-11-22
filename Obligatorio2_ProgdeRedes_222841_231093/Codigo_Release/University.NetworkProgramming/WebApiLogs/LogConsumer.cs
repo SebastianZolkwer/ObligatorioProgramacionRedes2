@@ -5,15 +5,22 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LogProducerConsumer
 {
     public class LogConsumer
     {
-        private const string SimpleQueueName = "n6aBasicQueue";
+        private const string SimpleQueueName = "BasicQueue";
 
+        public static void StartService()
+        {
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using IConnection connection = factory.CreateConnection();
+            using IModel channel = connection.CreateModel();
+            Task.Run(() => ReceiveMessages(channel));
 
-
+        }
         public static void DeclareQueue(IModel channel)
         {
             //Name (queue name)

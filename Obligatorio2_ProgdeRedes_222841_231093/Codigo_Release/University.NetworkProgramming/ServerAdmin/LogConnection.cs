@@ -5,22 +5,36 @@ using System.Threading.Tasks;
 
 namespace ServerAdmin
 {
-    static class LogConnection
+    public class LogConnection
     {
-        private const string SimpleQueueName = "n6aBasicQueue";
-        private const string ExitMessage = "exit";
-        private static IModel channel;
+       
+        private const string SimpleQueueName = "BasicQueue";
+        private const string ExchangeName = "BasicLogs";
+        private IModel channel { get; set; }
 
-        public static void  SetChannel(IConnection connection)
+        public LogConnection()
         {
-            if(channel is null)
-            {
-                using IModel channel = connection.CreateModel();
-                DeclareQueue(channel);
-            }
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using IConnection connection = factory.CreateConnection();
+            channel = connection.CreateModel();
+            DeclareExchange(channel);
+            DeclareQueue(channel);
+            channel.QueueBind(
+                queue: SimpleQueueName,
+                exchange: ExchangeName,
+                routingKey: SimpleQueueName
+                );
         }
 
-        public static void DeclareQueue(IModel channel)
+        private void DeclareExchange(IModel channel)
+        {
+            channel.ExchangeDeclare(
+                exchange: ExchangeName,
+                type: ExchangeType.Fanout
+                );
+        }
+
+        public  void DeclareQueue(IModel channel)
         {
             channel.QueueDeclare(
                 queue: SimpleQueueName,
@@ -30,19 +44,15 @@ namespace ServerAdmin
                 arguments: null);
         }
 
-        public static void PublishMessage( string message)
+        public  void PublishMessage( string message)
         {
-            var factory = new ConnectionFactory { HostName = "localhost" };
-            using IConnection connection = factory.CreateConnection();
-            using IModel channel2 = connection.CreateModel();
-            DeclareQueue(channel2);
             byte[] body = Encoding.UTF8.GetBytes(message);
-
-            channel2.BasicPublish(
-                exchange: "",
+            channel.BasicPublish(
+                exchange: ExchangeName,
                 routingKey: SimpleQueueName,
                 basicProperties: null,
-                body: body);
+                body: body
+                );
         }
     }
 }
